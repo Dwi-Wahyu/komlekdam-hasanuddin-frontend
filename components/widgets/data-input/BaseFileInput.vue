@@ -8,10 +8,11 @@
       type="file"
       class="hidden"
       ref="fileInput"
-      accept="image/*"
       :multiple="multiple"
       @change="handleFileChange"
+      :accept="fileType === 'image' ? 'image/*' : 'video/*'"
     />
+
     <div class="flex items-center flex-col gap-5" v-if="!isFileInserted">
       <div :class="{ 'text-red-500': error, 'text-yellow': !error }">
         <IconsUpload />
@@ -21,18 +22,31 @@
       <h1 v-else>{{ label }}</h1>
     </div>
     <div v-else>
-      <div v-if="multiple" class="text-center">
-        <h1 class="font-semibold">File Dipilih :</h1>
-        <h1 v-for="file in filesSelected">
-          {{ file.name }}
-        </h1>
+      <div v-if="fileType === 'image'">
+        <div v-if="multiple" class="text-center">
+          <h1 class="font-semibold">File Dipilih :</h1>
+          <h1 v-for="file in filesSelected">
+            {{ file.name }}
+          </h1>
+        </div>
+        <img
+          v-else
+          :src="thumbnailPreview"
+          alt="Preview"
+          class="max-w-full max-h-96 object-cover"
+        />
       </div>
-      <img
-        v-else
-        :src="thumbnailPreview"
-        alt="Preview"
-        class="max-w-full max-h-96 object-cover"
-      />
+      <div v-else>
+        <video
+          controls
+          preload="none"
+          class="w-full sm:w-[30vw]"
+          v-if="videoPreview"
+        >
+          <source :src="videoPreview" />
+          Browser tidak mendukung pemutaran video.
+        </video>
+      </div>
     </div>
   </div>
 </template>
@@ -49,6 +63,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  fileType: {
+    type: String,
+    default: "image",
+  },
   label: {
     type: String,
     default: "Upload Thumbnail Berita",
@@ -61,6 +79,8 @@ const props = defineProps({
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const thumbnailPreview = ref<string | null>(null);
+const videoPreview = ref<string | null>(null);
+const videoType = ref<string | null>(null);
 const isFileInserted = ref(false);
 const filesSelected = ref<File[] | []>();
 
@@ -76,15 +96,19 @@ function handleFileChange(event: Event) {
   if (!props.multiple) {
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      const reader = new FileReader();
 
-      reader.onload = (e) => {
-        thumbnailPreview.value = e.target?.result as string;
-      };
+      if (props.fileType === "image") {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          thumbnailPreview.value = e.target?.result as string;
+        };
+        reader.readAsDataURL(file);
+      } else if (props.fileType === "video") {
+        videoPreview.value = URL.createObjectURL(file);
+        videoType.value = file.type;
+      }
 
       fileModel.value = file;
-
-      reader.readAsDataURL(file);
     }
   } else {
     if (input.files) {

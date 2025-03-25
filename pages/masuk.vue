@@ -118,10 +118,12 @@ const [password, passwordAttr] = defineField("password");
 const [captcha, captchaAttr] = defineField("captcha");
 
 type RequestType = TBadRequestResponse & {
-  access_token?: string;
-  user?: {
+  access_token: string;
+  user: {
     id: string;
     username: string;
+    role: string;
+    nama: string;
   };
 };
 
@@ -135,7 +137,7 @@ const onSubmit = handleSubmit(async (payload) => {
 
   if (createRequest.data.access_token) {
     authStore.token = createRequest.data.access_token;
-    authStore.user = { username: "superadmin" };
+    authStore.user = createRequest.data.user;
 
     navigateTo("/admin/dashboard");
   } else {

@@ -2,7 +2,7 @@
   <div class="text-white">
     <WidgetsTambahBackButton
       link="/profil/edit-kakomlek-dan-wakakomlekdam"
-      kembali-to="/admin/profil/kepala"
+      kembali-to="/admin/profil/pimpinan"
     />
 
     <WidgetsJudulSection
@@ -99,7 +99,7 @@ const {
   data,
   refresh: refreshData,
   pending: loading,
-} = await useMyFetch<Kepala>(`/api/pejabat/kepala/${jabatan}`, {
+} = await useMyFetch<Kepala>(`/api/pejabat/pimpinan/${jabatan}`, {
   lazy: true,
 });
 
@@ -150,7 +150,7 @@ async function handleGantiPasfoto() {
   }
 
   const postRequest = await axios.postForm(
-    `/api/pejabat/kepala/pasfoto/${jabatan}`,
+    `/api/pejabat/pimpinan/ganti-pasfoto/${jabatan}`,
     payload
   );
 
@@ -170,7 +170,7 @@ async function handleSubmit() {
   payload.append("nama", nama.value);
 
   const putRequest = await axios.patch(
-    `/api/pejabat/kepala/${jabatan}`,
+    `/api/pejabat/pimpinan/${jabatan}`,
     payload
   );
 

@@ -10,6 +10,7 @@
       :value="modelValue"
       :disabled="disabled"
       v-bind="bindAttr"
+      :required="required"
       @input="$emit('update:modelValue', $event.target.value)"
       :class="[error ? 'border-danger' : 'border-yellow', variantClasses]"
     />
@@ -41,6 +42,10 @@ const props = defineProps({
   type: {
     type: String,
     default: "text",
+  },
+  required: {
+    type: Boolean,
+    default: false,
   },
   placeholder: {
     type: String,

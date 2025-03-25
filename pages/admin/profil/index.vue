@@ -32,7 +32,7 @@ definePageMeta({
 const cardData = [
   {
     title: "Kakomlekdam dan Wakakomlekdam",
-    bukaLink: "/admin/profil/kepala",
+    bukaLink: "/admin/profil/pimpinan",
     description:
       "Menu edit Kakomlekdam dan Wakakomlekdam XIV/Hsn periode sekarang",
   },

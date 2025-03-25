@@ -8,7 +8,10 @@ interface ErrorData {
 }
 
 type User = {
+  id: string;
   username: string;
+  role: string;
+  nama: string;
 };
 
 interface DecodedToken {

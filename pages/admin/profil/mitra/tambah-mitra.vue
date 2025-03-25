@@ -7,10 +7,7 @@
 
     <WidgetsJudulSection text="Form Tambah Data Mitra" class="mt-4" />
 
-    <form
-      @submit="onSubmit"
-      class="px-7 grid gap-7 grid-cols-2 py-6 bg-[#30394a]"
-    >
+    <form @submit="onSubmit" class="px-7 grid gap-7 py-6 bg-[#30394a]">
       <div>
         <WidgetsDataInputBaseFileInput
           label="Upload Logo"

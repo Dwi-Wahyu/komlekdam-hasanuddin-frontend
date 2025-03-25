@@ -5,6 +5,7 @@ export interface MenuItem {
   route: string;
   child?: any;
   roles: any;
+  restrictedRoles?: string[];
   type: string;
 }
 
@@ -79,16 +80,7 @@ export const menuItems: MenuItem[] = [
     route: "/admin/user",
     child: [],
     roles: [],
+    restrictedRoles: ["Journalis"],
     type: "parent",
   },
-  // { title: 'Laporan', icon: 'Laporan-active',icon2: 'Laporan-inactive', route: '/laporan', child : [], roles: [], type: 'parent' },
-  // { title: 'Kelola Data', icon: 'Laporan-active',icon2: 'Laporan-inactive', route: '/kelola-data', child : [
-  //     {
-  //         title: 'Data Penduduk',
-  //         route: '/kelola-data/penduduk'
-  //     },{
-  //         title: 'Data Infrastruktur',
-  //         route: '/kelola-data/infrastruktur'
-  //     },
-  // ], roles : [], type: 'parent' }
 ];

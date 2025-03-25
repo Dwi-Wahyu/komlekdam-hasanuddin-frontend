@@ -6,23 +6,32 @@ interface ResData {
   status: string;
 }
 
-type TProgramType = {
-  fotoPath: string;
+export type TLitbangType = {
+  id: string;
+  judul: string;
+  tanggal: string;
+  penulis: string;
 };
 
 type TDatatableData = TDatatableResponse & {
-  data: TProgramType[];
+  data: TLitbangType[];
 };
 
-export const useMyKepalaSatuanLampauStore = defineStore({
-  id: "myKepalaSatuanLampauStore",
+export const useMyLitbangStore = defineStore({
+  id: "myLitbangStore",
   state: () => ({
     currentPage: 1,
     totalPages: 10,
     perPage: 5,
     data: [] as any[],
     totalDatas: 50,
-    tableHeaders: ["No", "Foto Kepala Satuan Lampau", "Aksi"],
+    tableHeaders: [
+      "No",
+      "Judul Penelitian",
+      "Tanggal Penelitian",
+      "Penulis",
+      "Aksi",
+    ],
     step: 1,
     error: false,
     error_data: null as ResData | null,
@@ -39,24 +48,20 @@ export const useMyKepalaSatuanLampauStore = defineStore({
       const axios = useAxios();
 
       try {
-        const request = await axios.get<TDatatableData>(
-          "/api/kepala-satuan-lampau/data",
-          {
-            params: payload,
-          }
-        );
+        const request = await axios.get<TDatatableData>("/api/litbang/data", {
+          params: payload,
+        });
 
         request.data.data.map((element, index: number) => {
-          const { fotoPath } = element;
-
-          const url = "profil/kakomlekdam_lampau/" + fotoPath;
+          const { id, judul, penulis, tanggal } = element;
 
           let tempData = {
-            nomor: index + 1,
-            foto: url,
+            no: index + 1,
+            id,
+            judul,
+            penulis,
+            tanggal,
           };
-
-          console.log(element);
 
           this.data.push(tempData);
         });

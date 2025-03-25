@@ -6,23 +6,27 @@ interface ResData {
   status: string;
 }
 
-type TProgramType = {
-  fotoPath: string;
+export type TUserType = {
+  id: string;
+  nama: string;
+  username: string;
+  role: string;
+  password?: string;
 };
 
 type TDatatableData = TDatatableResponse & {
-  data: TProgramType[];
+  data: TUserType[];
 };
 
-export const useMyKepalaSatuanLampauStore = defineStore({
-  id: "myKepalaSatuanLampauStore",
+export const useMyUserStore = defineStore({
+  id: "myUserStore",
   state: () => ({
     currentPage: 1,
     totalPages: 10,
     perPage: 5,
     data: [] as any[],
     totalDatas: 50,
-    tableHeaders: ["No", "Foto Kepala Satuan Lampau", "Aksi"],
+    tableHeaders: ["No", "Nama", "Username", "Role"],
     step: 1,
     error: false,
     error_data: null as ResData | null,
@@ -39,24 +43,20 @@ export const useMyKepalaSatuanLampauStore = defineStore({
       const axios = useAxios();
 
       try {
-        const request = await axios.get<TDatatableData>(
-          "/api/kepala-satuan-lampau/data",
-          {
-            params: payload,
-          }
-        );
+        const request = await axios.get<TDatatableData>("/api/user/data", {
+          params: payload,
+        });
 
         request.data.data.map((element, index: number) => {
-          const { fotoPath } = element;
-
-          const url = "profil/kakomlekdam_lampau/" + fotoPath;
+          const { nama, id, username, role } = element;
 
           let tempData = {
-            nomor: index + 1,
-            foto: url,
+            no: index + 1,
+            nama,
+            username,
+            id,
+            role,
           };
-
-          console.log(element);
 
           this.data.push(tempData);
         });
