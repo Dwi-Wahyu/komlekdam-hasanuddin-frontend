@@ -77,14 +77,7 @@
             <WidgetsErrorInput :error="errors.captcha" />
           </div>
 
-          <div class="flex gap-4 justify-center">
-            <WidgetsButtonBaseButton
-              type="button"
-              @click="loginSuperadmin"
-              class="mt-3"
-            >
-              Superadmin Access
-            </WidgetsButtonBaseButton>
+          <div class="flex justify-center">
             <WidgetsButtonBaseButton
               type="submit"
               class="mt-3"
@@ -105,6 +98,10 @@ import { type TLoginSchema } from "~/schema/login-schema";
 import { loginSchema } from "~/schema/login-schema";
 import { useMyAuthStore } from "~/store/auth";
 import type { TBadRequestResponse } from "~/types/bad.request.response";
+
+definePageMeta({
+  layout: "login",
+});
 
 const axios = useAxios();
 
@@ -155,26 +152,6 @@ const onSubmit = handleSubmit(async (payload) => {
       setFieldError("password", error.response.data.message);
     }
   }
-});
-
-async function loginSuperadmin() {
-  const payload = {
-    username: "superadmin@gmail.com",
-    password: "secret",
-  };
-
-  const createRequest = await axios.post<RequestType>("/auth/login", payload);
-
-  if (createRequest.data.access_token) {
-    authStore.token = createRequest.data.access_token;
-    authStore.user = createRequest.data.user;
-
-    navigateTo("/admin/dashboard");
-  }
-}
-
-definePageMeta({
-  layout: "login",
 });
 
 const authStore = useMyAuthStore();
