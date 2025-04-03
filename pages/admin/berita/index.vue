@@ -56,12 +56,27 @@
       </WidgetsButtonBaseButton>
     </div>
   </div>
+
+  <WidgetsPopupAlert
+    v-if="showAlert"
+    label="Yakin menghapus berita ?"
+    @close="toggleAlert"
+    @confirm="handleHapus"
+  />
+
+  <WidgetsPopupToast
+    v-if="showToast"
+    label="Berhasil menghapus berita"
+    @close="toggleToast"
+  />
 </template>
 
 <script setup lang="ts">
 import Edit from "~/components/icons/Edit.vue";
+import Eye from "~/components/icons/Eye.vue";
 import Search from "~/components/icons/Search.vue";
 import Trash from "~/components/icons/Trash.vue";
+import { useMyAuthStore } from "~/store/auth";
 import { useMyBeritaStore } from "~/store/berita";
 
 definePageMeta({
@@ -69,6 +84,17 @@ definePageMeta({
 });
 
 const search = ref("");
+
+const showAlert = ref(false);
+const showToast = ref(false);
+
+function toggleAlert() {
+  showAlert.value = !showAlert.value;
+}
+
+function toggleToast() {
+  showToast.value = !showToast.value;
+}
 
 const beritaStore = useMyBeritaStore();
 
@@ -89,12 +115,16 @@ const perpageOptions = [
 
 const { data, loading, tableHeaders, currentPage } = storeToRefs(beritaStore);
 
+const authStore = useMyAuthStore();
+
+const id = ref();
+const axios = useAxios();
+
 const perpage = ref(beritaStore.perPage);
 
 function loadData() {
-  console.log(search.value);
-
   beritaStore.getData({
+    id_user: authStore.user?.id,
     search: search.value,
     per_page: perpage.value,
     page: 1,
@@ -110,19 +140,44 @@ const actions = [
   {
     label: "Edit",
     onClick: handleUpdateClick,
-    btnVariant: "primary",
     icon: Edit,
   },
   {
+    label: "Detail",
+    onClick: handleDetailClick,
+    icon: Eye,
+  },
+  {
     label: "Hapus",
-    onClick: () => {},
-    btnVariant: "danger",
+    onClick: handleHapusClick,
     icon: Trash,
   },
 ];
 
 function handleUpdateClick(row: any) {
   console.log(row);
+  navigateTo(`/admin/berita/edit-berita/${row.id}`);
+}
+
+function handleDetailClick(row: any) {
+  console.log(row.id);
+
+  navigateTo("/admin/berita/" + row.id);
+}
+
+function handleHapusClick(row: any) {
+  id.value = row.id;
+  toggleAlert();
+}
+
+async function handleHapus() {
+  const deleteRequest = await axios.delete(`/api/berita/${id.value}`);
+
+  if (deleteRequest.data.success) {
+    loadData();
+    toggleAlert();
+    toggleToast();
+  }
 }
 
 watch([search], () => {

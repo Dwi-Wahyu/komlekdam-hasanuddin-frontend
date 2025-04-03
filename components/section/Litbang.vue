@@ -9,28 +9,60 @@
         text="Program Penelitian dan Pengembangan"
         :with-out-line="true"
       />
+      <div v-if="pending">
+        <h1>Loading . . .</h1>
+      </div>
+      <div v-else-if="error">
+        <h1>{{ error }}</h1>
+      </div>
       <div
-        class="grid grid-cols-1 gap-10 items-center justify-center md:grid-cols-3"
+        v-else-if="data"
+        class="grid grid-cols-1 gap-10 md:px-64 items-center justify-center md:grid-cols-2"
       >
         <div
-          @click="navigateTo('/litbang/1')"
-          class="relative w-full md:col-start-2 cursor-pointer sm:aspect-[359/461] border-2 border-yellow"
+          class="cursor-pointer relative w-full sm:aspect-[359/461] border-2 border-yellow overflow-hidden"
+          v-for="litbang in data"
+          :key="litbang.id"
+          @click="navigateTo(`/litbang/${litbang.id}`)"
         >
-          <img
-            src="/image/litbang/1.jpeg"
+          <NuxtImg
+            :src="`${baseURL}/litbang/thumbnail/${litbang.thumbnailPath}`"
             class="w-full h-full object-cover"
-            alt=""
           />
           <div
-            class="absolute bottom-0 bg-gradient-to-t pt-20 w-full from-black via-black to-transparent left-0 p-5"
+            class="absolute bottom-0 bg-gradient-to-t from-black via-black flex justify-end flex-col px-4 py-3 to-transparent w-full pt-20"
           >
-            <h1 class="font-semibold mb-1">Rekayasa Fast Charging HT</h1>
-            <p class="text-xs gap-2 flex items-center">
-              Selengkapnya <IconsTriangle />
-            </p>
+            <h1 class="font-semibold">{{ litbang.judul }}</h1>
+            <h1>{{ truncateHtml(litbang.deskripsi, 20) }}</h1>
           </div>
         </div>
+      </div>
+      <div class="flex justify-center mt-5">
+        <WidgetsButtonBaseButton
+          variant="outline"
+          @click="navigateTo('/litbang/lampau')"
+        >
+          Lihat Penelitian Lampau
+        </WidgetsButtonBaseButton>
       </div>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { truncateHtml } from "~/function/truncateHtml";
+
+const runtimeConfig = useRuntimeConfig();
+const { baseURL } = runtimeConfig.public.axios;
+
+type Litbang = {
+  id: string;
+  judul: string;
+  deskripsi: string;
+  thumbnailPath: string;
+};
+
+const { data, pending, error } = await useMyFetch<Litbang[]>("/api/litbang", {
+  lazy: true,
+});
+</script>

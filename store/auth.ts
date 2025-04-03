@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { useAxios } from "@/composables/useAxios";
 import { jwtDecode } from "jwt-decode";
 interface ErrorData {
   msg: string;
@@ -7,8 +6,8 @@ interface ErrorData {
   status: string;
 }
 
-type User = {
-  id: string;
+export type TUser = {
+  id: number;
   username: string;
   role: string;
   nama: string;
@@ -29,7 +28,7 @@ export const useMyAuthStore = defineStore("myAuthStore", {
       "Silahkan masukkan Username dan Password untuk masuk ke aplikasi.",
     loginText: "Login Ke Aplikasi eData Ddesa Garing",
     token: "",
-    user: null as User | null,
+    user: null as TUser | null,
     error: false,
     error_data: null as ErrorData | null,
   }),

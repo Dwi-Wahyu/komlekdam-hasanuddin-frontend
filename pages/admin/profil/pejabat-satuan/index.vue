@@ -173,7 +173,7 @@ async function handleHapus() {
   }
 }
 
-watch([search], () => {
+watch([search, perpage], () => {
   loadData();
 });
 

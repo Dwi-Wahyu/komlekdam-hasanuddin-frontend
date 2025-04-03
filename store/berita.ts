@@ -6,7 +6,7 @@ interface ResData {
   status: string;
 }
 
-type TProgramType = {
+type TBerita = {
   judul: string;
   tanggal: string;
   penulis: string;
@@ -15,7 +15,7 @@ type TProgramType = {
 };
 
 type TDatatableData = TDatatableResponse & {
-  data: TProgramType[];
+  data: TBerita[];
 };
 
 export const useMyBeritaStore = defineStore({

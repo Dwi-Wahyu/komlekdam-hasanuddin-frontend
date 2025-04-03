@@ -166,7 +166,7 @@ async function handleGantiPasfoto() {
   }
 
   const postRequest = await axios.postForm(
-    `/api/pejabat/pasfoto/${id}`,
+    `/api/pejabat/ganti-pasfoto/${id}`,
     payload
   );
 

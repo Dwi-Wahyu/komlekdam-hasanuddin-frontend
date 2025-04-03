@@ -4,10 +4,11 @@
   >
     <div
       :class="startAnimation ? 'opacity-100' : 'opacity-0 pointer-events-none'"
-      class="bg-[#303949] p-7 relative min-w-72 flex items-center justify-center flex-col gap-2 rounded-2xl transition-all ease-in-out duration-300"
+      class="bg-[#303949] p-7 text-white max-w-96 relative min-w-72 flex items-center justify-center flex-col gap-2 rounded-2xl transition-all ease-in-out duration-300"
     >
       <h1 class="font-semibold text-lg">{{ label }}</h1>
       <IconsAlert />
+      <h1 class="text-center">{{ sublabel }}</h1>
 
       <div class="w-full mt-3 flex justify-center gap-3">
         <WidgetsButtonBaseButton
@@ -29,6 +30,9 @@
 <script setup>
 const props = defineProps({
   label: {
+    default: "",
+  },
+  sublabel: {
     default: "",
   },
 });

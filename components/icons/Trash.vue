@@ -8,7 +8,7 @@
     <rect width="24" height="24" fill="none" />
     <path
       fill="none"
-      stroke="#FFCD29"
+      stroke="currentColor"
       stroke-linecap="round"
       stroke-linejoin="round"
       stroke-width="2"

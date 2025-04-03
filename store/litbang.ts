@@ -6,6 +6,22 @@ interface ResData {
   status: string;
 }
 
+type TDokumentasi = {
+  id: number;
+  path: string;
+};
+
+export type TEachLitbangType = {
+  id: number;
+  judul: string;
+  tanggal: string;
+  deskripsi: string;
+  detail?: string;
+  thumbnailPath?: string;
+  videoPath?: string;
+  dokumentasi: TDokumentasi[];
+};
+
 export type TLitbangType = {
   id: string;
   judul: string;

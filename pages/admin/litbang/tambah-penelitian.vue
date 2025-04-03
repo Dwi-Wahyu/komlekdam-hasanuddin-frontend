@@ -5,7 +5,7 @@
     class="text-white"
   />
 
-  <WidgetsJudulSection text="Form Tambah Program" />
+  <WidgetsJudulSection text="Form Tambah Penelitian" />
 
   <div class="w-full bg-[#303949] text-white">
     <form @submit="onSubmit" class="p-5 bg-[#303949] w-full h-full">

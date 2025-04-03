@@ -6,8 +6,21 @@ interface ResData {
   status: string;
 }
 
+type TDokumentasiType = {
+  dokumentasiPath: string;
+  judul_keterangan: string;
+  narasi_keterangan: string;
+};
+
+export type TEachMitraType = {
+  id: number;
+  nama: string;
+  logoPath: string;
+  dokumentasi: TDokumentasiType[];
+};
+
 type TMitraType = {
-  nomor: number;
+  id: number;
   logoPath: string;
   nama: string;
 };
@@ -46,13 +59,13 @@ export const useMyMitraStore = defineStore({
         });
 
         request.data.data.map((element, index: number) => {
-          const { nomor, nama, logoPath } = element;
+          const { id, nama, logoPath } = element;
 
           const url = "profil/mitra/logo/" + logoPath;
 
           let tempData = {
             no: index + 1,
-            nomor,
+            id,
             nama,
             logo: url,
           };

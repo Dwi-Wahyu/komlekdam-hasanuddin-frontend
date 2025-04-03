@@ -85,6 +85,10 @@ const roleOptions = [
 const showToast = ref(false);
 const toastLabel = ref("");
 
+function toggleToast() {
+  showToast.value = !showToast.value;
+}
+
 const { defineField, errors, handleSubmit, resetForm } =
   useForm<TInputUserSchema>({
     validationSchema: inputUserSchema,
@@ -97,10 +101,6 @@ const [password, passwordAttrs] = defineField("password");
 const [confirmPassword, confirmPasswordAttrs] = defineField("confirmPassword");
 
 const axios = useAxios();
-
-function toggleToast() {
-  showToast.value = !showToast.value;
-}
 
 const onSubmit = handleSubmit(async (payload: TInputUserSchema) => {
   const formdata = {

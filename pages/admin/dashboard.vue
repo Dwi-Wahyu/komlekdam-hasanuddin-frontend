@@ -1,11 +1,113 @@
 <template>
-  <div>
-    <a href="/masuk"> Kembali </a>
+  <div v-if="pending">
+    <h1>Loading . . .</h1>
+  </div>
+  <div v-else-if="error">
+    {{ error }}
+  </div>
+  <div v-else-if="data" class="">
+    <h1 class="text-xl mb-6 font-semibold">Dashboard</h1>
+    <div class="grid gap-4 grid-cols-1 md:grid-cols-2">
+      <WidgetsDashboardCard
+        title="Jumlah Pengunjung Hari Ini"
+        :value="data?.pengunjung.hariIni"
+        :icon="StatistikToday"
+        :change="perubahanPengunjungHarian"
+      />
+      <WidgetsDashboardCard
+        title="Jumlah Pengunjung Minggu Ini"
+        :value="data?.pengunjung.mingguIni"
+        :icon="StatistikYesterday"
+        :change="perubahanPengunjungMingguan"
+      />
+      <WidgetsDashboardCard
+        title="Jumlah Pelaporan Minggu Ini"
+        :value="data?.pelaporan.mingguIni"
+        :icon="StatistikWeek"
+        :change="perubahanPelaporanMingguan"
+      />
+      <WidgetsDashboardCard
+        title="Jumlah Pelaporan Bulan Ini"
+        :value="data?.pelaporan.bulanIni"
+        :icon="StatistikMonth"
+        :change="perubahanPelaporanBulanan"
+      />
+    </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import StatistikMonth from "~/components/icons/StatistikMonth.vue";
+import StatistikToday from "~/components/icons/StatistikToday.vue";
+import StatistikWeek from "~/components/icons/StatistikWeek.vue";
+import StatistikYesterday from "~/components/icons/StatistikYesterday.vue";
+
 definePageMeta({
   middleware: "auth",
+  layout: "default",
+});
+
+type TStatistik = {
+  pengunjung: {
+    hariIni: number;
+    kemarin: number;
+    mingguIni: number;
+    mingguLalu: number;
+    bulanIni: number;
+    bulanLalu: number;
+  };
+  pelaporan: {
+    mingguIni: number;
+    mingguLalu: number;
+    bulanIni: number;
+    bulanLalu: number;
+  };
+  perubahanPengunjung: {
+    harian: number;
+    mingguan: number;
+  };
+  perubahanPelaporan: {
+    mingguan: number;
+    bulanan: number;
+  };
+};
+
+const perubahanPengunjungHarian = ref("");
+const perubahanPengunjungMingguan = ref("");
+const perubahanPelaporanMingguan = ref("");
+const perubahanPelaporanBulanan = ref("");
+
+function cekPerubahan(change: number, placeholder: string) {
+  if (change === 0) {
+    return `Tidak Ada Perubahan ${placeholder}`;
+  } else if (change > 0) {
+    return `+${change.toFixed()}% ${placeholder}`;
+  } else {
+    return `${change.toFixed()}% ${placeholder}`;
+  }
+}
+
+const { data, pending, error } = useMyFetch<TStatistik>("/api/statistik", {
+  lazy: true,
+  transform: (response) => {
+    perubahanPengunjungHarian.value = cekPerubahan(
+      response.perubahanPengunjung.harian,
+      "Sejak Kemarin"
+    );
+    perubahanPengunjungMingguan.value = cekPerubahan(
+      response.perubahanPengunjung.mingguan,
+      "Sejak Minggu Kemarin"
+    );
+    perubahanPelaporanMingguan.value = cekPerubahan(
+      response.perubahanPelaporan.mingguan,
+      "Sejak Minggu Kemarin"
+    );
+    perubahanPelaporanBulanan.value = cekPerubahan(
+      response.perubahanPelaporan.bulanan,
+      "Sejak Bulan Kemarin"
+    );
+
+    return response;
+  },
 });
 </script>

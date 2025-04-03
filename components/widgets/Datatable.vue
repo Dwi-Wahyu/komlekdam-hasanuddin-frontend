@@ -93,7 +93,6 @@
                 :key="actionIndex"
                 :variant="action.btnVariant"
                 @click="handleAction(action, row)"
-                size="sm"
                 class="rounded-lg mr-2"
               >
                 <component class="mr-1" :is="action.icon"></component>
@@ -110,7 +109,7 @@
               </button>
               <div
                 v-if="openDropdown === rowIndex"
-                class="fixed mt-2 w-32 -translate-x-[3.1rem] bg-[#30394a] border border-slate-200 rounded-lg shadow-lg z-[999]"
+                class="fixed mt-2 w-32 -translate-x-[3.1rem] bg-[#30394a] border border-slate-200 rounded-lg shadow-lg z-40"
               >
                 <button
                   v-for="(action, actionIndex) in actions"

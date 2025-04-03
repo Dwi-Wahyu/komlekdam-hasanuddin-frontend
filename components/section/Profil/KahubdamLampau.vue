@@ -1,63 +1,26 @@
 <template>
-  <div class="bg-[#303949] p-5 sm:p-10 sm:px-20 w-full">
+  <div class="bg-[#303949] p-5 sm:p-10 sm:px-20 w-full min-h-screen">
     <WidgetsJudulSection text="Kahubdam Dari Masa Ke Masa" />
 
-    <div class="relative">
-      <img
-        src="/public/image/profil/15.png"
-        class="opacity-50 absolute w-[70vw] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
-        alt=""
-      />
-
-      <div class="relative mt-4 z-30">
-        <div
-          v-for="(row, rowIdx) in range(1, 2)"
-          class="grid mb-8 grid-cols-1 sm:grid-cols-4 gap-5 md:grid-cols-5"
-          :key="rowIdx"
-        >
-          <div
-            v-for="(temp, tempIdx) in range(8, 12)"
-            class="flex justify-center"
-            :key="tempIdx"
-          >
-            <img
-              :src="`/image/profil/sejarah_kahubdam/${row}/Rectangle ${temp}.png`"
-              alt=""
-            />
-          </div>
-        </div>
-
-        <div
-          v-if="!seeMore"
-          @click="handleSeeMore"
-          class="w-full flex items-center cursor-pointer justify-center h-48 bg-gradient-to-t from-[#303949] via-[#303949] absolute bottom-0 to-transparent"
-        >
-          <h1>Lihat Lebih Banyak</h1>
-        </div>
-        <div
-          v-else
-          v-for="(row, rowIdx) in range(3, 6)"
-          class="grid mb-8 grid-cols-1 sm:grid-cols-4 gap-5 md:grid-cols-5"
-          :key="rowIdx"
-        >
-          <div
-            v-if="row != 6"
-            v-for="(temp, tempIdx) in range(8, 12)"
-            class="flex justify-center"
-            :key="tempIdx"
-          >
-            <img
-              :src="`/image/profil/sejarah_kahubdam/${row}/Rectangle ${temp}.png`"
-              alt=""
-            />
-          </div>
-          <div v-else class="flex justify-center md:col-start-3">
-            <img
-              :src="`/image/profil/sejarah_kahubdam/${row}/Rectangle 8.png`"
-              alt=""
-            />
-          </div>
-        </div>
+    <div class="relative mt-3">
+      <div class="flex w-full justify-center items-center absolute z-10">
+        <img src="/image/profil/15.png" class="opacity-50 w-[70vw]" alt="" />
+      </div>
+      <div v-if="pending">
+        <h1>Loading . . .</h1>
+      </div>
+      <div v-if="error">
+        <h1>{{ error }}</h1>
+      </div>
+      <div
+        v-if="data"
+        class="flex flex-wrap w-full items-center gap-7 justify-center relative z-20 top-0 left-0"
+      >
+        <template v-for="kakomlekdam_lampau in data">
+          <NuxtImg
+            :src="`${baseURL}/profil/kakomlekdam_lampau/${kakomlekdam_lampau.fotoPath}`"
+          />
+        </template>
       </div>
     </div>
   </div>
@@ -70,6 +33,17 @@ function handleSeeMore() {
   seeMore.value = !seeMore.value;
 }
 
-const range = (start: number, end: number) =>
-  Array.from({ length: end - start + 1 }, (_, i) => start + i);
+const runtimeConfig = useRuntimeConfig();
+const { baseURL } = runtimeConfig.public.axios;
+
+type TResponse = {
+  fotoPath: string;
+};
+
+const { data, pending, error } = await useMyFetch<TResponse[]>(
+  "/api/kepala-satuan-lampau",
+  {
+    lazy: true,
+  }
+);
 </script>

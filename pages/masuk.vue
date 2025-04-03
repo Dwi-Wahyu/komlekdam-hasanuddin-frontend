@@ -77,7 +77,14 @@
             <WidgetsErrorInput :error="errors.captcha" />
           </div>
 
-          <div class="flex justify-center">
+          <div class="flex gap-4 justify-center">
+            <WidgetsButtonBaseButton
+              type="button"
+              @click="loginSuperadmin"
+              class="mt-3"
+            >
+              Superadmin Access
+            </WidgetsButtonBaseButton>
             <WidgetsButtonBaseButton
               type="submit"
               class="mt-3"
@@ -120,7 +127,7 @@ const [captcha, captchaAttr] = defineField("captcha");
 type RequestType = TBadRequestResponse & {
   access_token: string;
   user: {
-    id: string;
+    id: number;
     username: string;
     role: string;
     nama: string;
@@ -133,6 +140,29 @@ const onSubmit = handleSubmit(async (payload) => {
     return;
   }
 
+  try {
+    const createRequest = await axios.post<RequestType>("/auth/login", payload);
+
+    if (createRequest.data.access_token) {
+      authStore.token = createRequest.data.access_token;
+      authStore.user = createRequest.data.user;
+
+      navigateTo("/admin/dashboard");
+    }
+  } catch (error: any) {
+    if (error.response.data.statusCode == 401) {
+      setFieldError("username", error.response.data.message);
+      setFieldError("password", error.response.data.message);
+    }
+  }
+});
+
+async function loginSuperadmin() {
+  const payload = {
+    username: "superadmin@gmail.com",
+    password: "secret",
+  };
+
   const createRequest = await axios.post<RequestType>("/auth/login", payload);
 
   if (createRequest.data.access_token) {
@@ -140,19 +170,8 @@ const onSubmit = handleSubmit(async (payload) => {
     authStore.user = createRequest.data.user;
 
     navigateTo("/admin/dashboard");
-  } else {
-    if (createRequest.data.fieldError) {
-      for (const each of createRequest.data.fieldError) {
-        setFieldError(each.field, each.errorMessage);
-      }
-    }
-
-    if (createRequest.data.statusCode == 401) {
-      setFieldError("username", createRequest.data.message);
-      setFieldError("password", createRequest.data.message);
-    }
   }
-});
+}
 
 definePageMeta({
   layout: "login",

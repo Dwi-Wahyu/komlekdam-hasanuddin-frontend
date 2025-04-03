@@ -16,9 +16,7 @@
           v-bind="namaAttrs"
         />
 
-        <span class="text-red-500 text-sm mt-1 block">
-          {{ errors.nama }}
-        </span>
+        <WidgetsErrorInput :error="errors.nama" />
       </div>
 
       <div>
@@ -26,13 +24,12 @@
           label="Nomor Telepon"
           placeholder="Masukkan Nomor Telepon Aktif/Whatsapp"
           variant="outline"
+          type="number"
           v-model="nomor"
           v-bind="nomorAttrs"
         />
 
-        <span class="text-red-500 text-sm mt-1 block">
-          {{ errors.nomor }}
-        </span>
+        <WidgetsErrorInput :error="errors.nomor" />
       </div>
 
       <div>
@@ -44,13 +41,12 @@
           v-bind="emailAttrs"
         />
 
-        <span class="text-red-500 text-sm mt-1 block">
-          {{ errors.email }}
-        </span>
+        <WidgetsErrorInput :error="errors.email" />
       </div>
 
       <div>
-        <WidgetsDataInputBaseInput
+        <WidgetsDataInputBaseTextArea
+          height="h-28"
           label="Pesan"
           placeholder="Masukkan isi, kritik, dan saran"
           variant="outline"
@@ -58,9 +54,7 @@
           v-bind="pesanAttrs"
         />
 
-        <span class="text-red-500 text-sm mt-1 block">
-          {{ errors.pesan }}
-        </span>
+        <WidgetsErrorInput :error="errors.pesan" />
       </div>
 
       <div class="flex justify-center">
@@ -84,7 +78,10 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { object, string, type InferType } from "yup";
+import {
+  inputLaporanSchema,
+  type TInputLaporanSchema,
+} from "~/schema/laporan/input";
 
 definePageMeta({
   layout: "landing",
@@ -92,22 +89,15 @@ definePageMeta({
 
 const showToast = ref(false);
 
+const axios = useAxios();
+
 function toggleToast() {
   showToast.value = !showToast.value;
 }
 
-const BuatLaporanSchema = object({
-  nama: string().required("Tolong ketik nama"),
-  nomor: string().required("Tolong ketik nomor"),
-  email: string().required("Tolong ketik email"),
-  pesan: string().required("Tolong ketik pesan"),
-});
-
-type TBuatLaporanSchema = InferType<typeof BuatLaporanSchema>;
-
-const { defineField, isSubmitting, errors, isValidating, handleSubmit } =
-  useForm<TBuatLaporanSchema>({
-    validationSchema: BuatLaporanSchema,
+const { defineField, errors, handleSubmit, resetForm } =
+  useForm<TInputLaporanSchema>({
+    validationSchema: inputLaporanSchema,
   });
 
 const [nama, namaAttrs] = defineField("nama");
@@ -115,19 +105,12 @@ const [nomor, nomorAttrs] = defineField("nomor");
 const [email, emailAttrs] = defineField("email");
 const [pesan, pesanAttrs] = defineField("pesan");
 
-const onSubmit = handleSubmit(async (values) => {
-  console.log(values);
+const onSubmit = handleSubmit(async (payload: TInputLaporanSchema) => {
+  const createRequest = await axios.post("/api/laporan", payload);
 
-  const createRequest = await fetch("/api/laporan", {
-    method: "POST",
-    body: JSON.stringify(values),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (createRequest.ok) {
+  if (createRequest.data.success) {
     toggleToast();
+    resetForm();
   }
 });
 </script>

@@ -26,7 +26,7 @@ export const inputPenelitianSchema = object({
     .test("fileSize", "File terlalu besar", (value) => {
       if (!value) return false;
       const file = value instanceof FileList ? value[0] : value;
-      return file && file.size <= 1024 * 1024 * 1024; // Maksimal 1GB
+      return file && file.size <= 10 * 1024 * 1024 * 1024; // Maksimal 1GB
     })
     .test("fileType", "Format file tidak didukung", (value) => {
       if (!value) return false;

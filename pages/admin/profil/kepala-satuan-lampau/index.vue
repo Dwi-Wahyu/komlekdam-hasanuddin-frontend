@@ -45,6 +45,7 @@
         :show-button-action="true"
         :actions="actions"
         :columns-visible="['nomor', 'img:foto']"
+        :action-without-dropdown="true"
       />
     </div>
     <div
@@ -59,13 +60,26 @@
         Tambah Data
       </WidgetsButtonBaseButton>
     </div>
+    <input
+      type="file"
+      class="hidden"
+      ref="fileInputFoto"
+      @change="handleFileChange"
+    />
   </div>
 
   <WidgetsPopupAlert
-    v-if="showAlert"
-    label="Anda Yakin Menghapus Data Pejabat ?"
-    @close="toggleAlert"
+    v-if="showAlertHapus"
+    label="Anda Yakin Menghapus Data Kakomlekdam Lampau? ?"
+    @close="toggleAlertHapus"
     @confirm="handleHapus"
+  />
+
+  <WidgetsPopupAlert
+    v-if="showAlertEdit"
+    label="Anda Yakin Mengganti Foto ?"
+    @close="toggleAlertEdit"
+    @confirm="handleGantiFoto"
   />
 
   <WidgetsPopupToast
@@ -88,6 +102,7 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 import Edit from "~/components/icons/Edit.vue";
+import Eye from "~/components/icons/Eye.vue";
 import Search from "~/components/icons/Search.vue";
 import Trash from "~/components/icons/Trash.vue";
 import {
@@ -103,13 +118,21 @@ definePageMeta({
 
 const search = ref("");
 
-const showAlert = ref(false);
+const runtimeConfig = useRuntimeConfig();
+const { baseURL } = runtimeConfig.public.axios;
+
+const showAlertHapus = ref(false);
+const showAlertEdit = ref(false);
 const showToast = ref(false);
 const showModal = ref(false);
 const toastLabel = ref("");
 
-function toggleAlert() {
-  showAlert.value = !showAlert.value;
+function toggleAlertHapus() {
+  showAlertHapus.value = !showAlertHapus.value;
+}
+
+function toggleAlertEdit() {
+  showAlertEdit.value = !showAlertEdit.value;
 }
 
 function toggleToast() {
@@ -128,6 +151,8 @@ const { defineField, errors, validate, isFieldValid, resetForm } =
   });
 
 const [foto, fotoAttrs] = defineField("foto");
+
+const fileInputFoto = ref<HTMLInputElement | null>();
 
 const perpageOptions = [
   {
@@ -169,10 +194,16 @@ const handlePageChange = (page: any) => {
 
 const actions = [
   {
-    label: "Edit",
-    onClick: handleUpdateClick,
+    label: "Edit Foto",
+    onClick: handleClickGanti,
     btnVariant: "primary",
     icon: Edit,
+  },
+  {
+    label: "Lihat Foto",
+    onClick: handleLihatClick,
+    btnVariant: "secondary",
+    icon: Eye,
   },
   {
     label: "Hapus",
@@ -182,13 +213,52 @@ const actions = [
   },
 ];
 
-function handleUpdateClick(row: any) {
-  navigateTo(`/admin/profil/pejabat-satuan/edit-pejabat/${row.nomor}`);
+function handleClickGanti(row: any) {
+  id.value = row.nomor;
+
+  if (fileInputFoto.value) {
+    fileInputFoto.value.click();
+  }
+}
+
+function handleFileChange(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+
+    foto.value = file;
+
+    toggleAlertEdit();
+  }
+}
+
+function handleLihatClick(row: any) {
+  navigateTo(`${baseURL}/${row.foto}`, {
+    external: true,
+  });
 }
 
 function handleDeleteClick(row: any) {
-  toggleAlert();
+  toggleAlertHapus();
   id.value = row.nomor;
+}
+
+async function handleGantiFoto() {
+  const payload = new FormData();
+
+  payload.append("foto", foto.value);
+
+  const createRequest = await axios.patchForm(
+    `/api/kepala-satuan-lampau/${id.value}`,
+    payload
+  );
+
+  if (createRequest.data.success) {
+    toastLabel.value = createRequest.data.message;
+    loadData();
+    toggleAlertEdit();
+    toggleToast();
+  }
 }
 
 async function handleSubmit() {
@@ -209,18 +279,20 @@ async function handleSubmit() {
 
   if (createRequest.data.success) {
     toastLabel.value = createRequest.data.message;
+    loadData();
     toggleModal();
     toggleToast();
-
     resetForm();
   }
 }
 
 async function handleHapus() {
-  const deleteRequest = await axios.delete(`/api/pejabat/${id.value}`);
+  const deleteRequest = await axios.delete(
+    `/api/kepala-satuan-lampau/${id.value}`
+  );
 
   if (deleteRequest.data.success) {
-    toggleAlert();
+    toggleAlertHapus();
     toggleToast();
     loadData();
   }

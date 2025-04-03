@@ -85,7 +85,8 @@
         </div>
       </div>
 
-      <div class="mt-5">
+      <div class="mt-6">
+        <h1 class="font-semibold mb-2 text-yellow">Detail</h1>
         <WidgetsEditorQuill @editor-content="onChangeEditor" />
         <WidgetsErrorInput :error="errors.detail" />
       </div>
@@ -120,11 +121,15 @@ import {
   inputBeritaSchema,
   type TInputBeritaSchema,
 } from "~/schema/berita/input";
+import { useMyAuthStore } from "~/store/auth";
 
 const showToast = ref(false);
 const toastLabel = ref("");
 
 const axios = useAxios();
+const authStore = useMyAuthStore();
+
+console.log(authStore.user?.id);
 
 function toggleToast() {
   showToast.value = !showToast.value;
@@ -164,22 +169,21 @@ function onChangeEditor(content: string) {
 }
 
 const onSubmit = handleSubmit(async (payload: TInputBeritaSchema) => {
-  console.log(payload);
-
   const formData = new FormData();
+
+  const publisher_id = authStore.user?.id.toString();
+
   formData.append("judul", payload.judul);
   formData.append("penulis", payload.penulis);
   formData.append("lokasi", payload.lokasi);
   formData.append("deskripsi", payload.deskripsi);
   formData.append("tanggal", payload.tanggal);
   formData.append("kategori", payload.kategori);
+  formData.append("publisher_id", publisher_id as string);
   formData.append("detail", payload.detail);
+  formData.append("thumbnail", payload.thumbnail);
 
-  if (payload.thumbnail) {
-    formData.append("thumbnail", payload.thumbnail);
-  }
-
-  const createRequest = await axios.postForm("/api/berita", payload);
+  const createRequest = await axios.postForm("/api/berita", formData);
 
   if (createRequest.data.success) {
     toastLabel.value = createRequest.data.message;

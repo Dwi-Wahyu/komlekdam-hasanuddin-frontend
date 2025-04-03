@@ -59,20 +59,21 @@
 
   <WidgetsPopupAlert
     v-if="showAlert"
-    label="Anda Yakin Menghapus Data User ?"
+    label="Anda Yakin Menghapus Penelitian ?"
     @close="toggleAlert"
     @confirm="handleHapus"
   />
 
   <WidgetsPopupToast
     v-if="showToast"
-    label="Berhasil Menghapus Data User"
+    label="Berhasil Menghapus Penelitian"
     @close="toggleToast"
   />
 </template>
 
 <script setup lang="ts">
 import Edit from "~/components/icons/Edit.vue";
+import GalleryAdd from "~/components/icons/GalleryAdd.vue";
 import Search from "~/components/icons/Search.vue";
 import Trash from "~/components/icons/Trash.vue";
 import { useMyLitbangStore } from "~/store/litbang";
@@ -141,6 +142,12 @@ const actions = [
     icon: Edit,
   },
   {
+    label: "Dokumentasi",
+    onClick: handleDokumentasiClick,
+    btnVariant: "secondary",
+    icon: GalleryAdd,
+  },
+  {
     label: "Hapus",
     onClick: handleDeleteClick,
     btnVariant: "danger",
@@ -148,8 +155,12 @@ const actions = [
   },
 ];
 
+function handleDokumentasiClick(row: any) {
+  navigateTo(`/admin/litbang/dokumentasi/${row.id}`);
+}
+
 function handleUpdateClick(row: any) {
-  navigateTo(`/admin/user/edit-user/${row.id}`);
+  navigateTo(`/admin/litbang/edit-litbang/${row.id}`);
 }
 
 function handleDeleteClick(row: any) {
@@ -158,7 +169,7 @@ function handleDeleteClick(row: any) {
 }
 
 async function handleHapus() {
-  const deleteRequest = await axios.delete(`/api/user/${id.value}`);
+  const deleteRequest = await axios.delete(`/api/litbang/${id.value}`);
 
   if (deleteRequest.data.success) {
     toggleAlert();

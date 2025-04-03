@@ -2,7 +2,7 @@
   <div>
     <div class="flex items-center gap-4">
       <button @click="navigateTo(kembaliTo)">
-        <IconsArrow />
+        <IconsArrow class="-rotate-90" />
       </button>
       <div class="text-sm">
         <h1 class="flex gap-2">

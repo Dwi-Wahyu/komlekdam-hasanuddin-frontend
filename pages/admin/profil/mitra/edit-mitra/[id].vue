@@ -1,23 +1,32 @@
 <template>
   <div class="text-white">
     <WidgetsTambahBackButton
-      link="/admin/profil/tambah-mitra"
+      link="/admin/profil/edit-mitra"
       kembali-to="/admin/profil/mitra"
     />
 
-    <WidgetsJudulSection text="Form Tambah Data Mitra" class="mt-4" />
+    <WidgetsJudulSection text="Form Edit Data Mitra" class="mt-4" />
 
+    <div v-if="pending">
+      <h1>Loading . . .</h1>
+    </div>
+    <div v-else-if="error">
+      {{ error }}
+    </div>
     <form
+      v-else-if="data"
       @submit="onSubmit"
       class="px-7 grid gap-7 grid-cols-2 py-6 bg-[#30394a]"
     >
       <div>
-        <WidgetsDataInputBaseFileInput
-          label="Upload Logo"
-          v-model="logo"
-          min-height="min-h-96"
-        />
-        <WidgetsErrorInput :error="errors.logo" class="mt-3" />
+        <h1 class="mb-1 text-yellow font-semibold">Logo Mitra</h1>
+        <div class="flex justify-center py-3 bg-[#1d242e] items-center">
+          <img
+            :src="`${baseURL}/profil/mitra/logo/${data?.logoPath}`"
+            class="max-w-96"
+            alt=""
+          />
+        </div>
       </div>
 
       <div class="flex flex-col gap-5">
@@ -33,9 +42,19 @@
         </div>
       </div>
 
-      <div class="flex justify-center col-span-2">
+      <div class="flex justify-center gap-5 col-span-2">
+        <input
+          type="file"
+          class="hidden"
+          ref="fileInputLogo"
+          accept="image/*"
+          @change="handleFileChange"
+        />
+        <WidgetsButtonBaseButton type="button" @click="handleClickGanti">
+          Ganti Thumbnail
+        </WidgetsButtonBaseButton>
         <WidgetsButtonBaseButton type="submit" variant="outline">
-          Tambah Data
+          Edit Data
         </WidgetsButtonBaseButton>
       </div>
     </form>
@@ -46,48 +65,115 @@
     :label="toastLabel"
     @close="toggleToast"
   />
+
+  <WidgetsPopupAlert
+    v-if="showAlert"
+    label="Yakin Mengganti Logo Mitra  ?"
+    @close="toggleAlert"
+    @confirm="handleGantiLogo"
+  />
 </template>
 
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 
-import { inputMitraSchema, type TInputMitraSchema } from "~/schema/mitra/input";
+import {
+  updateMitraSchema,
+  type TUpdateMitraSchema,
+} from "~/schema/mitra/update";
+import { type TEachMitraType } from "~/store/mitra";
 
 definePageMeta({
   layout: "tambah",
 });
 
 const showToast = ref(false);
+const showAlert = ref(false);
 const toastLabel = ref("");
-
-const { defineField, errors, handleSubmit, resetForm } =
-  useForm<TInputMitraSchema>({
-    validationSchema: inputMitraSchema,
-  });
-
-const [nama, namaAttrs] = defineField("nama");
-const [logo, logoAttrs] = defineField("logo");
-
-const axios = useAxios();
 
 function toggleToast() {
   showToast.value = !showToast.value;
 }
 
-const onSubmit = handleSubmit(async (payload: TInputMitraSchema) => {
-  const formdata = new FormData();
+function toggleAlert() {
+  showAlert.value = !showAlert.value;
+}
 
-  formdata.append("nama", payload.nama);
-  if (logo.value) {
-    formdata.append("logo", payload.logo);
+const axios = useAxios();
+
+const route = useRoute();
+const { id } = route.params;
+
+const runtimeConfig = useRuntimeConfig();
+const { baseURL } = runtimeConfig.public.axios;
+
+const { defineField, errors, handleSubmit, resetForm } =
+  useForm<TUpdateMitraSchema>({
+    validationSchema: updateMitraSchema,
+  });
+
+const [nama, namaAttrs] = defineField("nama");
+
+const { data, pending, error, refresh } = await useMyFetch<TEachMitraType>(
+  `/api/mitra/${id}`,
+  {
+    lazy: true,
+    onResponse: ({ response }) => {
+      if (response._data) {
+        nama.value = response._data.nama;
+      }
+    },
+  }
+);
+
+const fileInputLogo = ref<HTMLInputElement | null>();
+const logo = ref<File | null>(null);
+
+function handleClickGanti() {
+  if (!fileInputLogo.value) {
+    return;
   }
 
-  const postRequest = await axios.postForm("/api/mitra", formdata);
+  fileInputLogo.value.click();
+}
+
+function handleFileChange(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+
+    logo.value = file;
+
+    toggleAlert();
+  }
+}
+
+async function handleGantiLogo() {
+  const payload = new FormData();
+
+  if (logo.value) {
+    payload.append("logo", logo.value);
+  }
+
+  const postRequest = await axios.postForm(
+    `/api/mitra/ganti-logo/${id}`,
+    payload
+  );
+
+  if (postRequest.data.success) {
+    toggleAlert();
+    refresh();
+    toggleToast();
+    toastLabel.value = postRequest.data.message;
+  }
+}
+
+const onSubmit = handleSubmit(async (payload: TUpdateMitraSchema) => {
+  const postRequest = await axios.patch(`/api/mitra/${id}`, payload);
 
   if (postRequest.data.success) {
     toggleToast();
     toastLabel.value = postRequest.data.message;
-    resetForm();
   }
 });
 </script>

@@ -1,5 +1,6 @@
 <template>
   <SectionCariTenar />
+  <SectionCeritaInspiratif />
 </template>
 
 <script setup>

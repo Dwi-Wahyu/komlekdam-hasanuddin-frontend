@@ -250,7 +250,7 @@ const navigationMenu: Navigation[] = [
     path: "/ppid",
     child: [],
   },
-  { label: "Program", path: "/program" },
+  { label: "Kegiatan", path: "/kegiatan" },
   { label: "Litbang", path: "/litbang" },
   { label: "Cari Tenar", path: "/cari-tenar" },
   { label: "Lapor!", path: "/lapor" },

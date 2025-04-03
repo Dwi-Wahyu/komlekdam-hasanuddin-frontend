@@ -8,7 +8,14 @@
 import "quill/dist/quill.snow.css";
 import "./Quill.css";
 
-const emit = defineEmits(["editor-content"]); // Definisikan event
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
+});
+
+const emit = defineEmits(["editor-content", "update:modelValue"]); // Tambahkan update:modelValue untuk v-model
 const quillInstance = ref(null);
 const editorContent = ref("");
 
@@ -22,40 +29,56 @@ onMounted(async () => {
           container: [
             "bold",
             "italic",
-            "underline", // Format teks dasar
+            "underline",
             "strike",
             "blockquote",
             { header: 1 },
             { header: 2 },
             { list: "ordered" },
-            { list: "bullet" }, // Daftar (ordered dan bullet)
+            { list: "bullet" },
             { script: "sub" },
-            { script: "super" }, // Superscript dan subscript
+            { script: "super" },
             { indent: "-1" },
-            { indent: "+1" }, // Indentasi
-            { direction: "rtl" }, // Arah teks (right-to-left)
+            { indent: "+1" },
+            { direction: "rtl" },
             { color: [] },
-            { background: [] }, // Warna teks dan latar belakang
-            { font: [] }, // Font family
+            { background: [] },
+            { font: [] },
             { align: "" },
             { align: "center" },
             { align: "right" },
-            { align: "justify" }, // Alignment
+            { align: "justify" },
             "link",
             "image",
-            "video", // Media (link, gambar, video)
-            "clean", // Bersihkan formatting
+            "video",
+            "clean",
           ],
         },
       },
     });
 
+    // Set default value dari props.modelValue
+    if (props.modelValue) {
+      quillInstance.value.root.innerHTML = props.modelValue;
+    }
+
     // Kirim perubahan konten ke parent setiap kali ada perubahan
     quillInstance.value.on("text-change", () => {
-      const content = quillInstance.value.root.innerHTML; // Ambil konten HTML
-      editorContent.value = content; // Simpan konten di state lokal
-      emit("editor-content", content); // Kirim konten ke parent
+      const content = quillInstance.value.root.innerHTML;
+      editorContent.value = content;
+      emit("editor-content", content);
+      emit("update:modelValue", content); // Emit untuk v-model
     });
   }
 });
+
+// Watch untuk perubahan dari luar (jika modelValue berubah dari parent)
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (newValue !== editorContent.value && quillInstance.value) {
+      quillInstance.value.root.innerHTML = newValue;
+    }
+  }
+);
 </script>

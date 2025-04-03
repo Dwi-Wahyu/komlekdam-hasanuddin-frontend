@@ -56,6 +56,8 @@ const variantClasses = computed(() => {
       return "bg-primary text-white border border-yellow hover:bg-second focus:second transition-all ease-in-out duration-300";
     case "secondary":
       return "bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500";
+    case "danger":
+      return "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500";
     case "outline":
       return "bg-transparent text-blue-600 border border-blue-600 hover:border-yellow hover:text-white hover:bg-yellow transition-all ease-in-out";
     default:

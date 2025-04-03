@@ -64,7 +64,7 @@
 
   <WidgetsPopupAlert
     v-if="showAlert"
-    label="Anda Yakin Menghapus Data Pejabat ?"
+    label="Anda Yakin Menghapus Data Mitra ?"
     @close="toggleAlert"
     @confirm="handleHapus"
   />
@@ -78,6 +78,7 @@
 
 <script setup lang="ts">
 import Edit from "~/components/icons/Edit.vue";
+import GalleryAdd from "~/components/icons/GalleryAdd.vue";
 import Search from "~/components/icons/Search.vue";
 import Trash from "~/components/icons/Trash.vue";
 import { useMyMitraStore } from "~/store/mitra";
@@ -149,6 +150,12 @@ const actions = [
     icon: Edit,
   },
   {
+    label: "Dokumentasi",
+    onClick: handleDokumentasiClick,
+    btnVariant: "secondary",
+    icon: GalleryAdd,
+  },
+  {
     label: "Hapus",
     onClick: handleDeleteClick,
     btnVariant: "danger",
@@ -156,17 +163,21 @@ const actions = [
   },
 ];
 
+function handleDokumentasiClick(row: any) {
+  navigateTo(`/admin/profil/mitra/dokumentasi/${row.id}`);
+}
+
 function handleUpdateClick(row: any) {
-  navigateTo(`/admin/profil/mitra/edit-mitra/${row.nomor}`);
+  navigateTo(`/admin/profil/mitra/edit-mitra/${row.id}`);
 }
 
 function handleDeleteClick(row: any) {
   toggleAlert();
-  id.value = row.nomor;
+  id.value = row.id;
 }
 
 async function handleHapus() {
-  const deleteRequest = await axios.delete(`/api/pejabat/${id.value}`);
+  const deleteRequest = await axios.delete(`/api/mitra/${id.value}`);
 
   if (deleteRequest.data.success) {
     toggleAlert();
