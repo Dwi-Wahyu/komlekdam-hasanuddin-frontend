@@ -14,7 +14,7 @@
         <h1>{{ error }}</h1>
       </div>
       <div
-        v-else-if="data"
+        v-else-if="data?.length"
         class="grid grid-cols-1 gap-10 md:px-64 items-center justify-center md:grid-cols-2"
       >
         <div
@@ -34,6 +34,9 @@
             <h1>{{ truncateHtml(cerita.deskripsi, 20) }}</h1>
           </div>
         </div>
+      </div>
+      <div v-else>
+        <h1>Belum Ada Cerita Inspiratif</h1>
       </div>
     </div>
   </div>

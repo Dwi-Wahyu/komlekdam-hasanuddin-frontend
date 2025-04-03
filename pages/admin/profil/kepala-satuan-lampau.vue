@@ -183,12 +183,13 @@ function loadData() {
   kepalaSatuanLampauStore.getData({
     search: search.value,
     per_page: perpage.value,
-    page: 1,
+    page: currentPage.value,
   });
 }
 
 const handlePageChange = (page: any) => {
   kepalaSatuanLampauStore.currentPage = page;
+
   loadData();
 };
 
@@ -298,7 +299,9 @@ async function handleHapus() {
   }
 }
 
-watch([search], () => {
+watch([search, perpage], () => {
+  currentPage.value = 1;
+
   loadData();
 });
 

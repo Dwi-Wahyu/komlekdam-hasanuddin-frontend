@@ -21,3 +21,5 @@
 - fix bug dropdown aksi tabel masih muncul ketika toggleModal alert, dll [done]
 
 - fix hapus dokumentasi kegiatan [done]
+
+- fix ganti halaman table [done]

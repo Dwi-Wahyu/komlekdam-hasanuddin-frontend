@@ -100,18 +100,16 @@ const perpageOptions = [
 
 const perpage = ref(kegiatanStore.perPage);
 
-function loadData() {
-  console.log(search.value);
+const { data, loading, tableHeaders, currentPage } = storeToRefs(kegiatanStore);
+const id = ref("");
 
+function loadData() {
   kegiatanStore.getData({
     search: search.value,
     per_page: perpage.value,
-    page: 1,
+    page: currentPage.value,
   });
 }
-
-const { data, loading, tableHeaders } = storeToRefs(kegiatanStore);
-const id = ref("");
 
 const actions = [
   {
@@ -158,7 +156,9 @@ async function handleHapus() {
   }
 }
 
-watch([search], () => {
+watch([search, perpage], () => {
+  currentPage.value = 1;
+
   loadData();
 });
 

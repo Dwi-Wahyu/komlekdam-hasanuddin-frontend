@@ -1,9 +1,9 @@
 <template>
   <div
-    class="w-full bg-center bg-cover bg-[url('/backgrounds/program-bg1.jpeg')]"
+    class="w-full bg-center bg-cover min-h-screen bg-[url('/backgrounds/program-bg1.jpeg')]"
   >
     <div
-      class="bg-black/50 p-5 sm:p-20 flex pt-24 pb-10 flex-col gap-7 items-center justify-center w-full h-full"
+      class="bg-black/50 p-5 sm:p-20 flex pt-24 pb-10 flex-col gap-7 items-center justify-center w-full min-h-screen h-full"
     >
       <WidgetsJudulSection
         text="Program Penelitian dan Pengembangan"
@@ -16,7 +16,7 @@
         <h1>{{ error }}</h1>
       </div>
       <div
-        v-else-if="data"
+        v-else-if="data?.length"
         class="grid grid-cols-1 gap-10 md:px-64 items-center justify-center md:grid-cols-2"
       >
         <div
@@ -37,9 +37,13 @@
           </div>
         </div>
       </div>
+      <div v-else>
+        <h1>Belum ada penelitian</h1>
+      </div>
       <div class="flex justify-center mt-5">
         <WidgetsButtonBaseButton
           variant="outline"
+          v-if="data?.length"
           @click="navigateTo('/litbang/lampau')"
         >
           Lihat Penelitian Lampau

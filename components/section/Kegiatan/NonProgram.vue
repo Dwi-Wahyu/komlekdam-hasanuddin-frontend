@@ -11,7 +11,7 @@
         <h1>{{ error }}</h1>
       </div>
       <div
-        v-if="data?.length"
+        v-else-if="data?.length"
         class="grid grid-cols-1 gap-10 md:px-64 items-center justify-center md:grid-cols-2"
       >
         <div
@@ -38,6 +38,7 @@
       <div class="flex justify-center mt-5">
         <WidgetsButtonBaseButton
           variant="outline"
+          v-if="data?.length"
           @click="navigateTo('/kegiatan/lampau')"
         >
           Lihat Kegiatan Lampau

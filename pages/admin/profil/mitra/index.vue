@@ -133,7 +133,7 @@ function loadData() {
   mitraStore.getData({
     search: search.value,
     per_page: perpage.value,
-    page: 1,
+    page: currentPage.value,
   });
 }
 
@@ -186,7 +186,9 @@ async function handleHapus() {
   }
 }
 
-watch([search], () => {
+watch([search, perpage], () => {
+  currentPage.value = 1;
+
   loadData();
 });
 
