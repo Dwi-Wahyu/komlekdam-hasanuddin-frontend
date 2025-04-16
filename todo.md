@@ -23,3 +23,5 @@
 - fix hapus dokumentasi kegiatan [done]
 
 - fix ganti halaman table [done]
+
+- fix logo sidebar admin

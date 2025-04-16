@@ -8,21 +8,6 @@ import {
 
 const jenisBerita = ref("artikel");
 
-const berita = computed(() => {
-  switch (jenisBerita.value) {
-    case "internal":
-      return beritaInternal;
-    case "eksternal":
-      return beritaEksternal;
-    case "artikel":
-      return artikel;
-    case "zona-integritas":
-      return beritaZonaIntegritas;
-    default:
-      return beritaInternal;
-  }
-});
-
 const runtimeConfig = useRuntimeConfig();
 const { baseURL } = runtimeConfig.public.axios;
 const axios = useAxios();
@@ -106,13 +91,13 @@ function changePage(pageNumber: number) {
 function handleChangeJenis(jenis: string) {
   jenisBerita.value = jenis;
   page.value = 0;
-
   refreshData();
 }
 </script>
 
 <template>
   <div class="md:block hidden">
+    <!-- Desktop view remains the same -->
     <div
       class="w-full h-screen bg-center bg-cover bg-[url('/backgrounds/berita-bg1.jpeg')]"
     >
@@ -251,6 +236,7 @@ function handleChangeJenis(jenis: string) {
     </div>
   </div>
 
+  <!-- Mobile view using useMyFetch -->
   <div class="md:hidden">
     <div
       class="w-full h-full bg-center bg-cover bg-[url('/backgrounds/berita-bg1.jpeg')]"
@@ -291,59 +277,73 @@ function handleChangeJenis(jenis: string) {
           </WidgetsButtonBaseButton>
         </div>
 
-        <div class="relative mb-4 cursor-pointer">
-          <div
-            class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-20"
-          ></div>
-
-          <div class="absolute bottom-0 left-0 p-5 text-wrap z-30">
-            <h1 class="text-white font-semibold">
-              {{ berita[0].judul }}
-            </h1>
-          </div>
-
-          <img :src="berita[0].imgUrl" alt="" class="w-full shadow" />
+        <div v-if="pending">
+          <h1>Loading . . .</h1>
+        </div>
+        <div v-else-if="error">
+          {{ error }}
         </div>
 
-        <div class="relative mb-4 cursor-pointer">
+        <template v-if="data?.allBerita?.length">
           <div
-            class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-20"
-          ></div>
-
-          <div class="absolute bottom-0 left-0 p-5 text-wrap z-30">
-            <h1 class="text-white font-semibold">
-              {{ berita[1].judul }}
-            </h1>
+            v-for="(item, index) in data.allBerita.slice(0, 3)"
+            :key="item.id"
+            class="relative mb-4 cursor-pointer"
+            @click="navigateTo(`/berita/${item.id}`)"
+          >
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-20"
+            ></div>
+            <div class="absolute bottom-0 left-0 p-5 text-wrap z-30">
+              <h1 class="text-white font-semibold">
+                {{ item.judul }}
+              </h1>
+            </div>
+            <img
+              :src="`${baseURL}/berita/thumbnail/${item.thumbnailPath}`"
+              class="w-full shadow"
+              alt=""
+            />
           </div>
-
-          <img :src="berita[1].imgUrl" alt="" class="w-full shadow" />
+        </template>
+        <div
+          v-else
+          class="flex justify-center items-center h-40 gap-5 flex-col"
+        >
+          <h1 class="text-xl font-semibold">
+            Belum ada berita {{ jenisBerita }}
+          </h1>
+          <IconsEmpty />
         </div>
 
-        <div class="relative mb-4 cursor-pointer">
-          <div
-            class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-20"
-          ></div>
-
-          <div class="absolute bottom-0 left-0 p-5 text-wrap z-30">
-            <h1 class="text-white font-semibold">
-              {{ berita[2].judul }}
-            </h1>
-          </div>
-
-          <img :src="berita[2].imgUrl" alt="" class="w-full shadow" />
-        </div>
-        <div class="flex gap-2 text-yellow items-center justify-center mt-1">
-          <IconsChevron class="-rotate-90" width="30" height="30" />
-          <WidgetsButtonBaseButton class="rounded-lg" size="sm">
-            1
+        <div
+          v-if="totalPages > 1"
+          class="flex gap-2 text-yellow items-center justify-center mt-1"
+        >
+          <IconsChevron
+            class="-rotate-90 cursor-pointer"
+            width="30"
+            height="30"
+            @click="changePage(page - 1)"
+            :class="{ 'opacity-50': page === 0 }"
+          />
+          <WidgetsButtonBaseButton
+            v-for="pageNum in visiblePages"
+            :key="pageNum"
+            class="rounded-lg"
+            size="sm"
+            :variant="page === pageNum ? 'primary' : 'outline'"
+            @click="changePage(pageNum)"
+          >
+            {{ pageNum + 1 }}
           </WidgetsButtonBaseButton>
-          <WidgetsButtonBaseButton class="rounded-lg" size="sm">
-            2
-          </WidgetsButtonBaseButton>
-          <WidgetsButtonBaseButton class="rounded-lg" size="sm">
-            3
-          </WidgetsButtonBaseButton>
-          <IconsChevron class="rotate-90" width="30" height="30" />
+          <IconsChevron
+            class="rotate-90 cursor-pointer"
+            width="30"
+            height="30"
+            @click="changePage(page + 1)"
+            :class="{ 'opacity-50': page >= totalPages - 1 }"
+          />
         </div>
       </div>
     </div>

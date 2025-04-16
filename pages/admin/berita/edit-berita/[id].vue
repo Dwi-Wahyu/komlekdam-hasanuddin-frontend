@@ -1,11 +1,11 @@
 <template>
   <WidgetsTambahBackButton
-    link="/berita/tambah-berita"
+    link="/berita/edit-berita"
     kembali-to="/admin/berita"
     class="text-white"
   />
 
-  <WidgetsJudulSection text="Form Tambah Berita" />
+  <WidgetsJudulSection text="Form Edit Berita" />
 
   <div class="w-full bg-[#303949] text-white">
     <div v-if="pending">
@@ -111,7 +111,7 @@
           type="submit"
           class="border-yellow text-yellow"
         >
-          Buat Berita
+          Update Berita
         </WidgetsButtonBaseButton>
       </div>
     </form>
@@ -154,19 +154,10 @@ function toggleToast() {
   showToast.value = !showToast.value;
 }
 
-const {
-  defineField,
-  errors,
-  handleSubmit,
-  setFieldError,
-  isFieldValid,
-  validateField,
-  submitForm,
-  isFieldTouched,
-  resetForm,
-} = useForm<TInputBeritaSchema>({
-  validationSchema: inputBeritaSchema,
-});
+const { defineField, errors, handleSubmit, resetForm } =
+  useForm<TInputBeritaSchema>({
+    validationSchema: inputBeritaSchema,
+  });
 
 const kategoriOptions = [
   { label: "Artikel", value: "artikel" },
@@ -244,7 +235,7 @@ const onSubmit = handleSubmit(async (payload: TInputBeritaSchema) => {
   if (createRequest.data.success) {
     toastLabel.value = createRequest.data.message;
     toggleToast();
-    resetForm();
+    refresh();
   }
 });
 </script>

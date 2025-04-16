@@ -68,6 +68,8 @@ export const useMyLitbangStore = defineStore({
           params: payload,
         });
 
+        console.log(request);
+
         request.data.data.map((element, index: number) => {
           const { id, judul, penulis, tanggal } = element;
 

@@ -5,7 +5,7 @@
   >
     <div class="flex flex-col items-center gap-4" v-if="!store.sidebarActive">
       <div>
-        <NuxtImg src="/logo/logo.png" sizes="40px" />
+        <NuxtImg src="/logo/logo.png" />
       </div>
 
       <div class="flex" v-for="(item, index) in store.menu">
