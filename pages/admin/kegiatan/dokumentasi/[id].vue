@@ -95,7 +95,7 @@
 
   <WidgetsPopupAlert
     v-if="showAlert"
-    label="Yakin menghapus dokumentasi mitra?"
+    label="Yakin menghapus dokumentasi kegiatan?"
     @close="toggleAlert"
     @confirm="handleHapus"
   />
@@ -124,10 +124,6 @@ import {
   inputDokumentasiKegiatanSchema,
   type TInputDokumentasiKegiatanSchema,
 } from "~/schema/kegiatan/input-dokumentasi";
-import {
-  inputDokumentasiProgramSchema,
-  type TInputDokumentasiProgramSchema,
-} from "~/schema/program/input-dokumentasi";
 import type { TEachKegiatanType } from "~/store/kegiatan";
 
 const route = useRoute();

@@ -1,14 +1,14 @@
 <template>
   <div>
-    <h1 class="text-xl mb-4 font-semibold">User</h1>
+    <h1 class="text-xl mb-4 font-semibold">Laporan</h1>
 
     <div
       class="bg-[#30394a] mt-4 px-5 py-4 border-b-2 items-center flex justify-between"
     >
-      <h1 class="text-kg font-semibold text-yellow">List User</h1>
+      <h1 class="text-kg font-semibold text-yellow">List Pelaporan</h1>
 
       <WidgetsDataInputBaseInput
-        placeholder="Cari User"
+        placeholder="Cari Laporan"
         v-model="search"
         :with-icon="true"
         :icon="Search"
@@ -121,7 +121,6 @@ definePageMeta({
 const search = ref("");
 
 const runtimeConfig = useRuntimeConfig();
-const { baseURL } = runtimeConfig.public.axios;
 
 const showAlert = ref(false);
 const showToast = ref(false);
