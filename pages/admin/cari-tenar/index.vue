@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-xl mb-4 font-semibold">Program</h1>
+    <h1 class="text-xl mb-4 font-semibold">Cari Tenar</h1>
 
     <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
       <div
