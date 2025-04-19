@@ -130,7 +130,7 @@ function loadData() {
   jadwalLaguStore.getData({
     search: search.value,
     per_page: perpage.value,
-    page: currentPage,
+    page: currentPage.value,
   });
 }
 
