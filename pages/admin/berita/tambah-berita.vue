@@ -10,10 +10,13 @@
   <div class="w-full bg-[#303949] text-white">
     <form @submit="onSubmit" class="p-5 bg-[#303949] w-full h-full">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <WidgetsDataInputBaseFileInput
-          v-model="thumbnail"
-          :error="errors.thumbnail"
-        />
+        <div>
+          <WidgetsDataInputBaseFileInput
+            v-model="thumbnail"
+            :error="errors.thumbnail"
+          />
+          <WidgetsErrorInput :error="errors.thumbnail" />
+        </div>
         <div class="flex flex-col gap-4 text-yellow">
           <div>
             <WidgetsDataInputBaseInput

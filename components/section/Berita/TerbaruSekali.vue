@@ -97,7 +97,6 @@ function handleChangeJenis(jenis: string) {
 
 <template>
   <div class="md:block hidden">
-    <!-- Desktop view remains the same -->
     <div
       class="w-full h-screen bg-center bg-cover bg-[url('/backgrounds/berita-bg1.jpeg')]"
     >
@@ -185,9 +184,10 @@ function handleChangeJenis(jenis: string) {
           class="grid grid-cols-1 sm:grid-cols-2 mb-5"
         >
           <div
-            v-for="(item, index) in data.allBerita.slice(1)"
+            v-for="item in data.allBerita.slice(1)"
             :key="item.id"
-            class="flex gap-3"
+            @click="navigateTo(`/berita/${item.id}`)"
+            class="flex gap-3 cursor-pointer"
           >
             <img
               :src="`${baseURL}/berita/thumbnail/${item.thumbnailPath}`"
