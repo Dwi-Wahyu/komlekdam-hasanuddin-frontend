@@ -25,3 +25,9 @@
 - fix ganti halaman table [done]
 
 - fix logo sidebar admin
+
+- fix aksi tabel agar ketika ditekan disable scroll window
+
+- tambah pilihan zona integritas untuk input berita
+
+quill-image-resize-module

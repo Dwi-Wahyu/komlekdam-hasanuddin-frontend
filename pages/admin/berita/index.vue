@@ -8,7 +8,7 @@
       <h1 class="text-kg font-semibold text-yellow">List Berita</h1>
 
       <WidgetsDataInputBaseInput
-        placeholder="Cari Progam"
+        placeholder="Cari Berita"
         v-model="search"
         :with-icon="true"
         :icon="Search"

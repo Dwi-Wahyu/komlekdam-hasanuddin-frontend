@@ -15,13 +15,14 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["editor-content", "update:modelValue"]); // Tambahkan update:modelValue untuk v-model
+const emit = defineEmits(["editor-content", "update:modelValue"]);
 const quillInstance = ref(null);
 const editorContent = ref("");
 
 onMounted(async () => {
   if (process.client) {
     const Quill = (await import("quill")).default;
+
     quillInstance.value = new Quill("#editor", {
       theme: "snow",
       modules: {
@@ -54,6 +55,9 @@ onMounted(async () => {
             "clean",
           ],
         },
+        imageResize: {
+          displaySize: true,
+        },
       },
     });
 
@@ -62,17 +66,17 @@ onMounted(async () => {
       quillInstance.value.root.innerHTML = props.modelValue;
     }
 
-    // Kirim perubahan konten ke parent setiap kali ada perubahan
+    // Kirim perubahan konten ke parent
     quillInstance.value.on("text-change", () => {
       const content = quillInstance.value.root.innerHTML;
       editorContent.value = content;
       emit("editor-content", content);
-      emit("update:modelValue", content); // Emit untuk v-model
+      emit("update:modelValue", content);
     });
   }
 });
 
-// Watch untuk perubahan dari luar (jika modelValue berubah dari parent)
+// Watch untuk perubahan dari luar
 watch(
   () => props.modelValue,
   (newValue) => {

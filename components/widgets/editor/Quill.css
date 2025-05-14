@@ -2,6 +2,34 @@
   height: 400px;
 }
 
+/* Style untuk image resize handles */
+.ql-image-resize-handle {
+  background-color: #4285f4;
+  border: 1px solid #fff;
+  width: 10px !important;
+  height: 10px !important;
+}
+
+.ql-image-resize-handle.top-left {
+  top: -5px !important;
+  left: -5px !important;
+}
+
+.ql-image-resize-handle.top-right {
+  top: -5px !important;
+  right: -5px !important;
+}
+
+.ql-image-resize-handle.bottom-left {
+  bottom: -5px !important;
+  left: -5px !important;
+}
+
+.ql-image-resize-handle.bottom-right {
+  bottom: -5px !important;
+  right: -5px !important;
+}
+
 .ql-editor.ql-blank::before {
   color: #929bac; /* Warna placeholder */
   font-style: normal; /* Hilangkan gaya miring (italic) jika ada */

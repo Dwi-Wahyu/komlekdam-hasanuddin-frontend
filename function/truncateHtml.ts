@@ -1,11 +1,9 @@
-export function truncateHtml(content: any, maxLength: number) {
-  if (typeof content !== "string") {
-    return content;
-  }
+import truncate from "truncate-html";
 
-  if (content.length > maxLength) {
-    return `${content.slice(0, maxLength)}...`;
-  }
-
-  return content;
+export function truncateHtml(content: string, maxLength: number): string {
+  return truncate(content, {
+    length: maxLength,
+    ellipsis: "...",
+    keepWhitespaces: false,
+  });
 }

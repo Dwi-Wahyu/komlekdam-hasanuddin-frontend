@@ -156,11 +156,11 @@ const { baseURL } = runtimeConfig.public.axios;
 const openDropdown = ref(null);
 
 const toggleDropdown = (index) => {
-  // if (openDropdown.value == null) {
-  //   document.body.classList.add("no-scroll");
-  // } else {
-  //   document.body.classList.remove("no-scroll");
-  // }
+  if (openDropdown.value == null) {
+    document.body.classList.add("no-scroll");
+  } else {
+    document.body.classList.remove("no-scroll");
+  }
 
   openDropdown.value = openDropdown.value === index ? null : index;
 };
@@ -205,6 +205,8 @@ const props = defineProps({
 });
 
 const handleAction = (action, row) => {
+  document.body.classList.remove("no-scroll");
+
   if (typeof action.onClick === "function") {
     action.onClick(row);
   }

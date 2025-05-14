@@ -91,6 +91,7 @@
       <div class="mt-6">
         <h1 class="font-semibold mb-2 text-yellow">Detail</h1>
         <WidgetsEditorQuill @editor-content="onChangeEditor" />
+
         <WidgetsErrorInput :error="errors.detail" />
       </div>
 
@@ -156,6 +157,7 @@ const kategoriOptions = [
   { label: "Artikel", value: "artikel" },
   { label: "Internal", value: "internal" },
   { label: "Eksternal", value: "eksternal" },
+  { label: "Zona Integritas", value: "zona-integritas" },
 ];
 
 const [judul, judulAttrs] = defineField("judul");

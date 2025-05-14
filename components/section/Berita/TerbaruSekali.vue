@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import {
-  artikel,
-  beritaEksternal,
-  beritaInternal,
-  beritaZonaIntegritas,
-} from "~/data/landing/berita";
+import { truncateHtml } from "~/function/truncateHtml";
 
 const jenisBerita = ref("artikel");
 
@@ -181,7 +176,7 @@ function handleChangeJenis(jenis: string) {
       <div v-if="data?.totalBerita" class="">
         <div
           v-if="data?.allBerita?.length > 1"
-          class="grid grid-cols-1 sm:grid-cols-2 mb-5"
+          class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5"
         >
           <div
             v-for="item in data.allBerita.slice(1)"
@@ -194,9 +189,11 @@ function handleChangeJenis(jenis: string) {
               class="max-w-40"
               alt=""
             />
-            <div>
+            <div class="flex-1 min-w-0">
               <h1 class="mb-2 font-semibold text-lg">{{ item.judul }}</h1>
-              <p class="text-sm font-thin">{{ item.deskripsi }}</p>
+              <p class="text-sm font-thin break-words">
+                {{ truncateHtml(item.deskripsi, 200) }}
+              </p>
             </div>
           </div>
         </div>
