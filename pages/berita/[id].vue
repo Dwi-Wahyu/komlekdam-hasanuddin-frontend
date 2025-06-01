@@ -8,19 +8,50 @@
       <div class="grid grid-cols-3 gap-8">
         <div class="gap-3 md:col-span-2 col-span-3 flex flex-col">
           <div>
-            <h1 class="font-semibold text-2xl text-yellow">
+            <h1 class="font-semibold text-xl md:text-3xl text-yellow">
               {{ data?.judul }}
             </h1>
-            <h1 class="text-sm text-gray-400 mt-1">
-              {{ data?.lokasi }}, {{ data?.tanggal }} - {{ data?.penulis }} -
-              {{ data?.kategori }}
-            </h1>
+            <div class="flex justify-between mt-2">
+              <div
+                class="flex items-center text-xs md:text-sm text-yellow gap-2"
+              >
+                <div class="inline-flex gap-1 items-center">
+                  <IconsEye />
+                  <h1>{{ data?.jumlahPengunjung }} kali diliat</h1>
+                </div>
+
+                <div class="inline-flex gap-1 items-center">
+                  <IconsShare />
+                  <h1>{{ data?.jumlahDibagikan }} kali dibagikan</h1>
+                </div>
+              </div>
+
+              <WidgetsButtonBaseButton
+                size="sm"
+                variant="outline"
+                add-class="rounded-full"
+                @click="showShareBerita = true"
+              >
+                <div class="md:flex gap-1 hidden items-center">
+                  <IconsPaperPlane />
+
+                  <span> Bagikan Berita </span>
+                </div>
+                <div class="md:hidden block">
+                  <IconsPaperPlane width="14" height="14" />
+                </div>
+              </WidgetsButtonBaseButton>
+            </div>
           </div>
 
           <img
             :src="`${baseURL}/berita/thumbnail/${data?.thumbnailPath}`"
             alt=""
           />
+          <h1 class="text-sm text-gray-400 mt-1">
+            {{ data?.lokasi }}, {{ data?.tanggal }} - {{ data?.penulis }} -
+            {{ data?.kategori }}
+          </h1>
         </div>
         <div class="hidden flex-col gap-5 md:flex">
           <div class="flex items-center gap-4">
@@ -31,7 +62,7 @@
             <h1>Loading berita populer . . .</h1>
           </div>
           <div v-else-if="errorBeritaPopuler">
-            <h1>Loading berita populer . . .</h1>
+            <h1>Error berita populer . . .</h1>
           </div>
           <div
             v-else-if="beritaPopuler"
@@ -84,6 +115,15 @@
       <PageKomentar :id="data?.id" />
     </div>
   </div>
+
+  <WidgetsPopupShareBerita
+    v-if="showShareBerita"
+    @close="showShareBerita = false"
+    @refresh="refresh"
+    :label="data?.judul"
+    :linkBerita="`https://hubdam14hsn.tni-ad.mil.id/berita/${data?.id}`"
+    :idBerita="data?.id"
+  />
 </template>
 
 <script setup lang="ts">
@@ -96,7 +136,10 @@ definePageMeta({
   layout: "landing",
 });
 
+const showShareBerita = ref(false);
+
 const route = useRoute();
+const axios = useAxios();
 const { id } = route.params;
 
 const runtimeConfig = useRuntimeConfig();
@@ -131,6 +174,8 @@ type TBerita = {
   thumbnailPath: string;
   kategori: string;
   detail: string;
+  jumlahPengunjung: number;
+  jumlahDibagikan: number;
   like: number;
   dislike: number;
   komentar: TKomentar[];
