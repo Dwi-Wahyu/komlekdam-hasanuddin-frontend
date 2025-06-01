@@ -22,9 +22,9 @@ type ResponseType = {
 const url = computed(() => `/api/berita/kategori/${jenisBerita.value}`);
 
 const page = ref(0);
-const itemsPerPage = 3;
+const itemsPerPage = 5; // Display 5 news articles per page
 const totalPages = computed(() => {
-  if (!data.value?.totalBerita) return 0;
+  if (!data.value?.totalBerita) return 0; // Fixed: Removed "Ascending"
   return Math.ceil(data.value.totalBerita / itemsPerPage);
 });
 
@@ -55,25 +55,40 @@ async function refreshData() {
 }
 
 const visiblePages = computed(() => {
-  const pages = [];
+  const pages = new Set<number>();
   const current = page.value;
   const total = totalPages.value;
 
-  if (current > 1) pages.push(0);
-
-  // Tampilkan halaman sekitar current
-  for (
-    let i = Math.max(0, current - 1);
-    i <= Math.min(current + 1, total - 1);
-    i++
-  ) {
-    if (!pages.includes(i)) pages.push(i);
+  // Always add the first page if there are multiple pages
+  if (total > 1) {
+    pages.add(0);
   }
 
-  // Selalu tampilkan halaman terakhir jika berbeda
-  if (current < total - 2 && total > 1) pages.push(total - 1);
+  // Add pages within ±2 of the current page
+  for (
+    let i = Math.max(0, current - 2);
+    i <= Math.min(current + 2, total - 1);
+    i++
+  ) {
+    pages.add(i);
+  }
 
-  return pages.slice(0, 3); // Maksimal 3 tombol
+  // Always add the last page if it’s not already included and there are multiple pages
+  if (total > 1 && current < total - 3) {
+    pages.add(total - 1);
+  }
+
+  // Convert Set to array and sort numerically
+  const sortedPages = Array.from(pages).sort((a, b) => a - b);
+
+  // Limit to 5 pages, prioritizing the current page and its neighbors
+  if (sortedPages.length > 5) {
+    const indexOfCurrent = sortedPages.indexOf(current);
+    const startIndex = Math.max(0, indexOfCurrent - 2);
+    return sortedPages.slice(startIndex, startIndex + 5);
+  }
+
+  return sortedPages;
 });
 
 function changePage(pageNumber: number) {
@@ -138,17 +153,16 @@ function handleChangeJenis(jenis: string) {
         </div>
         <div v-if="data?.allBerita?.length">
           <div
-            v-for="(item, index) in data.allBerita"
+            v-for="(item, index) in data.allBerita.slice(0, 1)"
             :key="item.id"
             @click="navigateTo(`/berita/${item.id}`)"
             class="gap-5 grid grid-cols-2 cursor-pointer"
           >
-            <div v-if="index === 0">
+            <div>
               <h1 class="font-semibold text-lg mb-2">{{ item.judul }}</h1>
               <p class="font-thin">{{ item.deskripsi }}</p>
             </div>
             <img
-              v-if="index === 0"
               :src="`${baseURL}/berita/thumbnail/${item.thumbnailPath}`"
               class="w-[30rem] object-cover h-[23rem]"
               alt=""
@@ -173,13 +187,13 @@ function handleChangeJenis(jenis: string) {
       <div v-else-if="error">
         {{ error }}
       </div>
-      <div v-if="data?.totalBerita" class="">
+      <div v-if="data?.totalBerita">
         <div
           v-if="data?.allBerita?.length > 1"
           class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5"
         >
           <div
-            v-for="item in data.allBerita.slice(1)"
+            v-for="item in data.allBerita.slice(1, 5)"
             :key="item.id"
             @click="navigateTo(`/berita/${item.id}`)"
             class="flex gap-3 cursor-pointer"
@@ -210,18 +224,16 @@ function handleChangeJenis(jenis: string) {
           @click="changePage(page - 1)"
           :class="{ 'opacity-50': page === 0 }"
         />
-
         <WidgetsButtonBaseButton
-          v-for="pageNum in totalPages"
+          v-for="pageNum in visiblePages"
           :key="pageNum"
           class="rounded-lg"
-          :variant="page === pageNum - 1 ? 'primary' : 'outline'"
+          :variant="page === pageNum ? 'primary' : 'outline'"
           size="sm"
-          @click="changePage(pageNum - 1)"
+          @click="changePage(pageNum)"
         >
-          {{ pageNum }}
+          {{ pageNum + 1 }}
         </WidgetsButtonBaseButton>
-
         <IconsChevron
           class="rotate-90 cursor-pointer"
           width="30"
@@ -233,7 +245,7 @@ function handleChangeJenis(jenis: string) {
     </div>
   </div>
 
-  <!-- Mobile view using useMyFetch -->
+  <!-- Mobile view -->
   <div class="md:hidden">
     <div
       class="w-full h-full bg-center bg-cover bg-[url('/backgrounds/berita-bg1.jpeg')]"
@@ -283,7 +295,7 @@ function handleChangeJenis(jenis: string) {
 
         <template v-if="data?.allBerita?.length">
           <div
-            v-for="(item, index) in data.allBerita.slice(0, 3)"
+            v-for="(item, index) in data.allBerita.slice(0, 5)"
             :key="item.id"
             class="relative mb-4 cursor-pointer"
             @click="navigateTo(`/berita/${item.id}`)"
