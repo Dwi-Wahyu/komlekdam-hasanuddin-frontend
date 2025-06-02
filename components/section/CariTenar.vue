@@ -25,6 +25,11 @@ type TLiveYoutube = {
 
 type TResponse = {
   jadwalSekarang: TJadwalLagu;
+  modeStreaming: {
+    nomor: number;
+    label: string;
+    value: string;
+  };
   adaJadwal: boolean;
 };
 
@@ -34,17 +39,9 @@ function toggleToast() {
   showToast.value = !showToast.value;
 }
 
-const { data, pending, error } = await useMyFetch<TResponse>(
-  "/api/jadwal-lagu/sekarang",
-  {
-    lazy: true,
-    onResponse: ({ response }) => {
-      if (response._data.adaJadwal) {
-        audioSource.value = `${baseURL}/jadwal-lagu/${response._data.jadwalSekarang.laguPath}`;
-      }
-    },
-  }
-);
+const { data } = await useMyFetch<TResponse>("/api/jadwal-lagu", {
+  lazy: true,
+});
 
 const { data: liveyoutubeData, pending: liveyoutubePending } =
   await useMyFetch<TLiveYoutube>("/api/live-youtube", {
@@ -58,7 +55,7 @@ const togglePlay = () => {
     return;
   }
 
-  if (!data.value?.adaJadwal) {
+  if (data.value?.modeStreaming.value === "false" && !data.value.adaJadwal) {
     toggleToast();
   }
 
@@ -77,17 +74,19 @@ const togglePlay = () => {
     label="Belum ada jadwal lagu pada saat ini"
   />
 
-  <div v-if="pending">
-    <h1>Loading . . .</h1>
+  <div v-if="data">
+    <audio
+      ref="audioElement"
+      v-if="data?.modeStreaming.value === 'true'"
+      src="https://a7.alhastream.com:4190/radio"
+    ></audio>
+    <audio
+      ref="audioElement"
+      v-else
+      :src="`${baseURL}/jadwal-lagu/${data.jadwalSekarang.laguPath}`"
+    ></audio>
   </div>
-  <div v-else-if="error">
-    {{ error }}
-  </div>
-  <audio
-    v-else-if="data?.adaJadwal"
-    ref="audioElement"
-    :src="audioSource"
-  ></audio>
+
   <div
     class="bg-[url('/backgrounds/profil-cari-tenar1.jpeg')] md:hidden bg-center bg-cover w-full h-full"
   >
@@ -136,13 +135,19 @@ const togglePlay = () => {
             </div>
             <div v-else class="flex items-center gap-1 w-full h-full">
               <IconsStop />
-              <div class="flex flex-col">
+              <div
+                v-if="data?.modeStreaming.value === 'false'"
+                class="flex flex-col"
+              >
                 <h1 class="text-sm">{{ data?.jadwalSekarang.judul }}</h1>
                 <div class="flex gap-1 text-xs">
                   <h1>{{ data?.jadwalSekarang.mulai }}</h1>
                   -
                   <h1>{{ data?.jadwalSekarang.selesai }}</h1>
                 </div>
+              </div>
+              <div v-else>
+                <h1 class="text-sm">Al-Ikhwan 101,9 FM</h1>
               </div>
             </div>
           </div>

@@ -49,6 +49,7 @@
             <WidgetsDataInputBaseInput
               variant="outline"
               label="Password"
+              type="password"
               placeholder="Masukkan Password"
               v-model="password"
               v-bind="passwordAttr"

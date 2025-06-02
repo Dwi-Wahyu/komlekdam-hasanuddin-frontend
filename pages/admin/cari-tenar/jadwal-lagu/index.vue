@@ -52,13 +52,33 @@
         Menampilkan {{ perpage }} dari {{ jadwalLaguStore.totalDatas }} data
       </h1>
 
-      <WidgetsButtonBaseButton
-        @click="navigateTo('/admin/cari-tenar/jadwal-lagu/tambah-jadwal-lagu')"
-        size="sm"
-        variant="outline"
-      >
-        Tambah Jadwal Lagu
-      </WidgetsButtonBaseButton>
+      <div class="flex gap-3 items-center">
+        <WidgetsButtonBaseButton
+          v-if="!streamingModeRadio"
+          size="sm"
+          variant="outline"
+          @click="toggleEnableRadio()"
+        >
+          Streaming Al-Ikhwan
+          <IconsRadio class="ml-2" v-if="streamingModeFetch.pending" />
+          <IconsLoader class="animate-spin ml-2" v-else />
+        </WidgetsButtonBaseButton>
+        <WidgetsButtonBaseButton v-else size="sm" @click="toggleEnableRadio()">
+          Streaming Al-Ikhwan
+          <IconsRadio class="ml-2" v-if="streamingModeFetch.pending" />
+          <IconsLoader class="animate-spin ml-2" v-else />
+        </WidgetsButtonBaseButton>
+
+        <WidgetsButtonBaseButton
+          @click="
+            navigateTo('/admin/cari-tenar/jadwal-lagu/tambah-jadwal-lagu')
+          "
+          size="sm"
+          variant="outline"
+        >
+          Tambah Jadwal Lagu
+        </WidgetsButtonBaseButton>
+      </div>
     </div>
   </div>
 
@@ -120,6 +140,30 @@ const perpageOptions = [
 const { data, loading, tableHeaders, currentPage } =
   storeToRefs(jadwalLaguStore);
 
+type TResponse = {
+  result: {
+    nomor: number;
+    label: string;
+    value: string;
+  };
+};
+
+const streamingModeRadio = ref(false);
+
+const streamingModeFetch = await useMyFetch<TResponse>(
+  "/api/jadwal-lagu/mode/streaming",
+  {
+    lazy: true,
+    onResponse: ({ response }) => {
+      if (response._data.result.value === "true") {
+        streamingModeRadio.value = true;
+      } else {
+        streamingModeRadio.value = false;
+      }
+    },
+  }
+);
+
 const axios = useAxios();
 
 const id = ref("");
@@ -153,6 +197,14 @@ const actions = [
     icon: Trash,
   },
 ];
+
+async function toggleEnableRadio() {
+  const toggleRequest = await axios.get("/api/jadwal-lagu/toggle/radio");
+
+  console.log(toggleRequest);
+
+  streamingModeFetch.refresh();
+}
 
 function handleUpdateClick(row: any) {
   navigateTo(`/admin/cari-tenar/jadwal-lagu/edit-jadwal-lagu/${row.id}`);
