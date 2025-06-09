@@ -46,7 +46,7 @@
           v-if="data?.length"
           @click="navigateTo('/litbang/lampau')"
         >
-          Lihat Penelitian Lampau
+          Lihat Penelitian Lainnya
         </WidgetsButtonBaseButton>
       </div>
     </div>

@@ -41,7 +41,7 @@
           v-if="data?.length"
           @click="navigateTo('/kegiatan/lampau')"
         >
-          Lihat Kegiatan Lampau
+          Lihat Kegiatan Lainnya
         </WidgetsButtonBaseButton>
       </div>
     </div>
