@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-[100vh] pt-24 pb-10 md:pb-24 px-5 md:px-64">
     <div class="flex mb-5 gap-2 justify-between flex-col md:flex-row">
-      <WidgetsJudulSection text="Penelitian Lampau" :with-out-line="true" />
+      <WidgetsJudulSection text="Daftar Penelitian" :with-out-line="true" />
       <div class="flex gap-4 flex-col md:flex-row">
         <WidgetsDataInputBaseInput placeholder="Cari Judul" v-model="judul" />
       </div>
