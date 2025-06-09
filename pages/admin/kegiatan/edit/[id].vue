@@ -269,8 +269,13 @@ async function handleGantiThumbnail() {
   }
   payload.append("kategori", kategori.value);
 
+  if (!kategori.value) {
+    alert("Data tidak valid tolong refresh halaman");
+    return;
+  }
+
   const postRequest = await axios.postForm(
-    `/api/kegiatan/ganti-thumbnail/${id}`,
+    `/api/kegiatan/ganti-thumbnail/${kategori.value}/${id}`,
     payload
   );
 
@@ -290,8 +295,13 @@ async function handleGantiVideo() {
   }
   payload.append("kategori", kategori.value);
 
+  if (!kategori.value) {
+    alert("Data tidak valid tolong refresh halaman");
+    return;
+  }
+
   const postRequest = await axios.postForm(
-    `/api/kegiatan/ganti-video/${id}`,
+    `/api/kegiatan/ganti-video/${kategori.value}/${id}`,
     payload
   );
 
