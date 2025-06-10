@@ -18,6 +18,16 @@
             Browser tidak mendukung pemutaran video.
           </video>
         </div>
+
+        <WidgetsButtonBaseButton
+          class="rounded flex py-2 items-center gap-2"
+          variant="secondary"
+          size="sm"
+          @click="copyVideoLink"
+        >
+          <IconsCopy />
+          {{ buttonText }}
+        </WidgetsButtonBaseButton>
       </div>
     </div>
     <div class="p-5 sm:p-10 pb-16">
@@ -26,10 +36,11 @@
       <div class="mt-10">
         <WidgetsJudulSection text="Dokumentasi" />
 
-        <div class="grid grid-cols-3 items-center gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-5">
           <NuxtImg
             v-for="dokumentasi in data.dokumentasi"
             :src="`${baseURL}/litbang/dokumentasi/${dokumentasi.path}`"
+            :key="dokumentasi.id"
           />
         </div>
       </div>
@@ -38,6 +49,8 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue"; // Pastikan ref di-import
+
 definePageMeta({
   layout: "landing",
 });
@@ -66,4 +79,32 @@ const { id } = route.params;
 const { data, pending, error } = await useMyFetch<TEachLitbangType>(
   `/api/litbang/${id}`
 );
+
+// --- PENAMBAHAN FUNGSI BARU DI SINI ---
+
+// 1. Buat state untuk teks tombol agar bisa dinamis
+const buttonText = ref("Salin Link Video");
+
+// 2. Buat fungsi untuk menyalin link
+const copyVideoLink = async () => {
+  if (!data.value) return;
+
+  const videoUrl = `${baseURL}/litbang/video/${data.value.videoPath}`;
+
+  try {
+    await navigator.clipboard.writeText(videoUrl);
+
+    buttonText.value = "Link Tersalin!";
+
+    setTimeout(() => {
+      buttonText.value = "Salin Link Video";
+    }, 2000);
+  } catch (err) {
+    console.error("Gagal menyalin link: ", err);
+    buttonText.value = "Gagal Menyalin";
+    setTimeout(() => {
+      buttonText.value = "Salin Link Video";
+    }, 2000);
+  }
+};
 </script>

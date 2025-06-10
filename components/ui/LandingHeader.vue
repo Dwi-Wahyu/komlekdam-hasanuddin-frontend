@@ -254,5 +254,6 @@ const navigationMenu: Navigation[] = [
   { label: "Litbang", path: "/litbang" },
   { label: "Cari Tenar", path: "/cari-tenar" },
   { label: "Lapor!", path: "/lapor" },
+  { label: "Standar Layanan", path: "/standar-layanan" },
 ];
 </script>

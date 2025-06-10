@@ -15,6 +15,17 @@
       >
         Buat Laporan
       </WidgetsButtonBaseButton>
+
+      <WidgetsButtonBaseButton
+        @click="
+          navigateTo('https://lapor.go.id/instansi/hubdam-xivhsn', {
+            external: true,
+          })
+        "
+        class="mt-5 border-yellow"
+      >
+        SP4N
+      </WidgetsButtonBaseButton>
     </div>
   </div>
 </template>

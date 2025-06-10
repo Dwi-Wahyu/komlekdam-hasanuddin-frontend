@@ -20,6 +20,16 @@
             Browser tidak mendukung pemutaran video.
           </video>
         </div>
+
+        <WidgetsButtonBaseButton
+          class="rounded flex py-2 items-center gap-2"
+          variant="secondary"
+          size="sm"
+          @click="copyVideoLink"
+        >
+          <IconsCopy />
+          {{ buttonText }}
+        </WidgetsButtonBaseButton>
       </div>
     </div>
     <div class="p-5 sm:p-10 pb-16">
@@ -28,9 +38,10 @@
       <div class="mt-10">
         <WidgetsJudulSection text="Dokumentasi" />
 
-        <div class="grid grid-cols-3 items-center gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-5">
           <NuxtImg
             v-for="dokumentasi in data.dokumentasi"
+            :key="dokumentasi.id"
             :src="`${baseURL}/kegiatan/${data.kategori}/dokumentasi/${dokumentasi.path}`"
           />
         </div>
@@ -40,6 +51,8 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue"; // Pastikan ref di-import
+
 definePageMeta({
   layout: "landing",
 });
@@ -72,4 +85,38 @@ const { data, pending, error } = await useMyFetch<TEachKegiatanType>(
     lazy: true,
   }
 );
+
+// --- PENAMBAHAN FUNGSI BARU DI SINI ---
+
+// 1. Buat state untuk teks tombol agar bisa dinamis
+const buttonText = ref("Salin Link Video");
+
+// 2. Buat fungsi untuk menyalin link
+const copyVideoLink = async () => {
+  // Pastikan 'data' tidak null sebelum melanjutkan
+  if (!data.value) return;
+
+  // Bentuk URL video lengkap sesuai struktur halaman ini
+  const videoUrl = `${baseURL}/kegiatan/${data.value.kategori}/video/${data.value.videoPath}`;
+
+  try {
+    // Gunakan Clipboard API untuk menyalin teks
+    await navigator.clipboard.writeText(videoUrl);
+
+    // Berikan feedback ke pengguna
+    buttonText.value = "Link Tersalin!";
+
+    // Kembalikan teks tombol ke semula setelah 2 detik
+    setTimeout(() => {
+      buttonText.value = "Salin Link Video";
+    }, 2000);
+  } catch (err) {
+    console.error("Gagal menyalin link: ", err);
+    // Beri tahu pengguna jika terjadi kesalahan
+    buttonText.value = "Gagal Menyalin";
+    setTimeout(() => {
+      buttonText.value = "Salin Link Video";
+    }, 2000);
+  }
+};
 </script>
