@@ -1,2 +1,0 @@
-- cari cara quill-image-resize-module
-- buat menu standar pelaksanaan (sisa edit, sama detail layanan)

@@ -187,6 +187,7 @@ const {
   error: errorBeritaPopuler,
 } = await useMyFetch<TBerita[]>("/api/berita/populer", {
   lazy: true,
+  server: false,
   query: {
     excludeId: id,
   },
@@ -196,6 +197,7 @@ const { data, error, pending, refresh } = await useMyFetch<TBerita>(
   "/api/berita/" + id,
   {
     lazy: true,
+    server: false,
     transform: (response) => {
       const formatted = moment(response.tanggal, "YYYY-MM-DD").format(
         "DD MMMM YYYY"

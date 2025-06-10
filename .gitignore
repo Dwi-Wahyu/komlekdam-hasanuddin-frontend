@@ -15,7 +15,7 @@ node_modules
 logs
 *.log
 
-
+nuxt.config.ts
 
 # Misc
 .DS_Store

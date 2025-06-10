@@ -82,6 +82,7 @@ const { id } = route.params;
 const { data, pending, error } = await useMyFetch<TEachKegiatanType>(
   `/api/kegiatan/${id}`,
   {
+    server: false,
     lazy: true,
   }
 );

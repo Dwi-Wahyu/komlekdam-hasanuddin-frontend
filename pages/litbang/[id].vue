@@ -77,7 +77,11 @@ const route = useRoute();
 const { id } = route.params;
 
 const { data, pending, error } = await useMyFetch<TEachLitbangType>(
-  `/api/litbang/${id}`
+  `/api/litbang/${id}`,
+  {
+    server: false,
+    lazy: true,
+  }
 );
 
 // --- PENAMBAHAN FUNGSI BARU DI SINI ---
