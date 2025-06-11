@@ -68,12 +68,12 @@
           >
             Surat Edaran (SE)
           </NuxtLink>
-          <NuxtLink
-            to="/eksternal/standar-pemeliharaan"
+          <button
+            @click="toggleShowStandarPemeliharaan"
             class="nav-button bg-green"
           >
             Standar Pemeliharaan
-          </NuxtLink>
+          </button>
         </div>
       </div>
     </main>
@@ -92,6 +92,11 @@
       :qr-image-url="qrModalImageUrl"
       @close="closeQrModal"
     />
+
+    <WidgetsPopupStandarPemeliharaan
+      v-if="showStandaPemeliharaanPopup"
+      @close="toggleShowStandarPemeliharaan"
+    />
   </div>
 </template>
 
@@ -101,6 +106,12 @@ definePageMeta({
 });
 
 import { ref } from "vue";
+
+const showStandaPemeliharaanPopup = ref(false);
+
+function toggleShowStandarPemeliharaan(params) {
+  showStandaPemeliharaanPopup.value = !showStandaPemeliharaanPopup.value;
+}
 
 const isQrModalVisible = ref(false);
 const qrModalTitle = ref("");
