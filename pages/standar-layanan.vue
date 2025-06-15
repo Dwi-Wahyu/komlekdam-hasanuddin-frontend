@@ -18,29 +18,42 @@
         </h2>
 
         <div v-if="isInternalUnlocked" class="flex flex-col space-y-4">
-          <button @click="showQrCode('kta')" class="nav-button bg-blue">
-            Barcode KTA
-          </button>
-          <button @click="showQrCode('kpi')" class="nav-button bg-blue">
-            Barcode KPI
-          </button>
-          <NuxtLink
-            :to="`${baseURL}/standar-layanan/surat telegram.pdf`"
-            target="_blank"
-            :external="true"
-            class="nav-button bg-blue"
+          <WidgetsButtonStandarLayanan
+            @click="showQrCode('kta')"
+            add-class="bg-blue"
           >
-            Surat Telegram (ST)
-          </NuxtLink>
+            Barcode KTA
+          </WidgetsButtonStandarLayanan>
+
+          <WidgetsButtonStandarLayanan
+            @click="showQrCode('kpi')"
+            add-class="bg-blue"
+          >
+            Barcode KPI
+          </WidgetsButtonStandarLayanan>
+
+          <WidgetsButtonStandarLayanan add-class="bg-blue">
+            <NuxtLink
+              :to="`${baseURL}/standar-layanan/${getValue('surat-telegram')}`"
+              target="_blank"
+              :external="true"
+              class="bg-blue"
+            >
+              Surat Telegram (ST)
+            </NuxtLink>
+          </WidgetsButtonStandarLayanan>
         </div>
 
         <div v-else class="flex h-full flex-col items-center justify-center">
           <p class="mb-4 text-center text-gray-400">
             Area ini dilindungi password.
           </p>
-          <button @click="showModal = true" class="nav-button bg-danger">
+          <WidgetsButtonStandarLayanan
+            @click="toggleShowModal"
+            add-class="bg-danger"
+          >
             Buka Akses Internal
-          </button>
+          </WidgetsButtonStandarLayanan>
         </div>
       </div>
 
@@ -52,28 +65,32 @@
         </h2>
 
         <div class="flex flex-col space-y-4">
-          <NuxtLink
-            to="https://forms.gle/HrScPMBPrMtDbe798"
-            target="_blank"
-            :external="true"
-            class="nav-button bg-green"
-          >
-            Layanan MINMATHUB
-          </NuxtLink>
-          <NuxtLink
-            :to="`${baseURL}/standar-layanan/surat edaran.pdf`"
-            target="_blank"
-            :external="true"
-            class="nav-button bg-green"
-          >
-            Surat Edaran (SE)
-          </NuxtLink>
-          <button
+          <WidgetsButtonStandarLayanan add-class="bg-green">
+            <NuxtLink
+              :to="getValue('minmathub')"
+              target="_blank"
+              :external="true"
+            >
+              Layanan MINMATHUB
+            </NuxtLink>
+          </WidgetsButtonStandarLayanan>
+
+          <WidgetsButtonStandarLayanan add-class="bg-green">
+            <NuxtLink
+              :to="`${baseURL}/standar-layanan/${getValue('surat-edaran')}`"
+              target="_blank"
+              :external="true"
+            >
+              Surat Edaran (SE)
+            </NuxtLink>
+          </WidgetsButtonStandarLayanan>
+
+          <WidgetsButtonStandarLayanan
             @click="toggleShowStandarPemeliharaan"
-            class="nav-button bg-green"
+            add-class="bg-green"
           >
             Standar Pemeliharaan
-          </button>
+          </WidgetsButtonStandarLayanan>
         </div>
       </div>
     </main>
@@ -94,13 +111,14 @@
     />
 
     <WidgetsPopupStandarPemeliharaan
-      v-if="showStandaPemeliharaanPopup"
+      v-if="showStandaPemeliharaanPopup && data"
       @close="toggleShowStandarPemeliharaan"
+      :data="data"
     />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 definePageMeta({
   layout: "landing",
 });
@@ -109,7 +127,26 @@ import { ref } from "vue";
 
 const showStandaPemeliharaanPopup = ref(false);
 
-function toggleShowStandarPemeliharaan(params) {
+interface StandarLayananItem {
+  label: string;
+  value: string;
+  type: "link" | "document" | "image" | "video";
+  fileUrl?: string;
+}
+
+const { data, error } = await useMyFetch<StandarLayananItem[]>(
+  "/api/standar-layanan",
+  {
+    lazy: true,
+    server: false,
+  }
+);
+
+function getValue(label: string) {
+  return data.value?.filter((value) => value.label === label)[0].value;
+}
+
+function toggleShowStandarPemeliharaan() {
   showStandaPemeliharaanPopup.value = !showStandaPemeliharaanPopup.value;
 }
 
@@ -120,13 +157,14 @@ const qrModalImageUrl = ref("");
 const runtimeConfig = useRuntimeConfig();
 const { baseURL } = runtimeConfig.public.axios;
 
-const showQrCode = (type) => {
+const showQrCode = (type: string) => {
   if (type === "kta") {
     qrModalTitle.value = "Scan QR Code KTA";
-    qrModalImageUrl.value = baseURL + "/standar-layanan/qrcode-kta.jpg";
+    qrModalImageUrl.value = baseURL + "/standar-layanan/" + getValue("qr-kta");
   } else if (type === "kpi") {
     qrModalTitle.value = "Scan QR Code KPI";
-    qrModalImageUrl.value = baseURL + "/standar-layanan/qrcode-kpi.jpg";
+    qrModalImageUrl.value =
+      baseURL + "/standar-layanan/qrcode-kpi.jpg" + getValue("qr-kpi");
   }
   isQrModalVisible.value = true;
 };
@@ -138,22 +176,12 @@ const closeQrModal = () => {
 const showModal = ref(false);
 const isInternalUnlocked = ref(false);
 
+function toggleShowModal() {
+  showModal.value = !showModal.value;
+}
+
 const unlockInternal = () => {
   isInternalUnlocked.value = true;
   showModal.value = false;
 };
 </script>
-
-<style scoped lang="postcss">
-/* Kita bisa menambahkan beberapa style global atau style untuk kelas kustom di sini */
-body {
-  font-family: "Inter", sans-serif; /* Contoh penggunaan font, bisa diganti */
-}
-
-/* REKOMENDASI: Mengaktifkan kembali kelas ini membuat template lebih bersih.
-  @apply adalah fitur Tailwind untuk menerapkan beberapa utility class ke dalam satu kelas kustom.
-*/
-.nav-button {
-  @apply block w-full rounded-md p-4 text-center text-lg font-semibold text-white shadow-md transition-transform duration-200 hover:scale-105;
-}
-</style>

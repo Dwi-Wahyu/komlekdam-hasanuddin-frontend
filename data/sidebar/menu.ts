@@ -93,4 +93,13 @@ export const menuItems: MenuItem[] = [
     restrictedRoles: ["Journalis"],
     type: "parent",
   },
+  {
+    title: "Standar Layanan",
+    icon: "standar-layanan",
+    icon2: "standar-layanan",
+    route: "/admin/standar-layanan",
+    child: [],
+    roles: [],
+    type: "parent",
+  },
 ];

@@ -10,7 +10,7 @@
             Standar Pemeliharaan
           </h1>
           <h1 class="text-sm text-yellow text-center mb-4">
-            Ketuk dimanapun diluar kotak untuk keluar
+            Ketuk dimanapun diluar kotak untuk keluar dari menu
           </h1>
 
           <div class="grid grid-cols-2 gap-4">
@@ -18,9 +18,12 @@
               v-for="idx in [0, 1, 2, 3]"
               :key="idx"
               @click="
-                navigateTo(`${baseURL}/standar-layanan/har-${idx}.mp4`, {
-                  external: true,
-                })
+                navigateTo(
+                  `${baseURL}/standar-layanan/${getValue('har-' + idx)}`,
+                  {
+                    external: true,
+                  }
+                )
               "
               class="w-full rounded-lg bg-yellow py-2.5 font-bold text-white transition hover:bg-opacity-90"
             >
@@ -33,9 +36,28 @@
   </Teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const runtimeConfig = useRuntimeConfig();
 const { baseURL } = runtimeConfig.public.axios;
+
+interface StandarLayananItem {
+  label: string;
+  value: string;
+  type: "link" | "document" | "image" | "video";
+  fileUrl?: string;
+}
+
+// Definisikan props
+const props = defineProps({
+  data: {
+    type: Array as PropType<StandarLayananItem[]>,
+    default: [],
+  },
+});
+
+function getValue(label: string) {
+  return props.data?.filter((value) => value.label === label)[0].value;
+}
 
 defineEmits(["close"]);
 </script>

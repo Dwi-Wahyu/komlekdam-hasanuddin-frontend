@@ -8,12 +8,15 @@
       <button @click="toggleModal" class="absolute text-white right-4 top-4">
         <IconsX width="17" height="17" fill="white" />
       </button>
-      <div class="w-40 h-40 mt-2 relative rounded-full border-4">
-        <!-- Garis pertama -->
-        <div class="line left-4 top-[4.5rem] line-1"></div>
-        <!-- Garis kedua -->
-        <div class="line left-[3.2rem] top-[7.4rem] line-2"></div>
+
+      <div v-if="type === 'success'">
+        <IconsCheckCircle />
       </div>
+
+      <div v-else>
+        <IconsXCircle />
+      </div>
+
       <h1 class="text-white font-semibold text-lg">{{ label }}</h1>
     </div>
   </div>
@@ -23,6 +26,12 @@
 defineProps({
   label: {
     type: String,
+    required: true,
+  },
+  type: {
+    type: String,
+    default: "success",
+    validator: (value) => ["success", "error"].includes(value),
   },
 });
 
@@ -32,42 +41,3 @@ function toggleModal() {
   emit("close");
 }
 </script>
-
-<style scoped>
-.line {
-  position: absolute;
-  height: 1rem;
-  background-color: #d9d9d9;
-  transform-origin: left;
-}
-
-.line-1 {
-  width: 0;
-  transform: rotate(45deg);
-  animation: extendLine1 0.3s forwards 0.1s;
-}
-
-.line-2 {
-  width: 0;
-  transform: rotate(-45deg);
-  animation: extendLine2 0.3s forwards 0.4s; /* Delay 0.3s */
-}
-
-@keyframes extendLine1 {
-  from {
-    width: 0;
-  }
-  to {
-    width: 40%; /* Sesuaikan panjang garis sesuai kebutuhan */
-  }
-}
-
-@keyframes extendLine2 {
-  from {
-    width: 0;
-  }
-  to {
-    width: 70%; /* Sesuaikan panjang garis sesuai kebutuhan */
-  }
-}
-</style>

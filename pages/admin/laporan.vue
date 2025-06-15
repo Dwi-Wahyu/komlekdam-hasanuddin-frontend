@@ -114,8 +114,8 @@ import Trash from "~/components/icons/Trash.vue";
 import { useMyLaporanStore } from "~/store/laporan";
 
 definePageMeta({
-  layout: "default",
   middleware: "auth",
+  layout: "default",
 });
 
 const search = ref("");
