@@ -86,10 +86,10 @@ const { defineField, errors, handleSubmit, resetForm } =
     validationSchema: inputCeritaInspiratifSchema,
   });
 
-const [judul, judulAttrs] = defineField("judul");
-const [deskripsi, deskripsiAttrs] = defineField("deskripsi");
-const [thumbnail, thumbnailAttrs] = defineField("thumbnail");
-const [video, videoAttrs] = defineField("video");
+const [judul] = defineField("judul");
+const [deskripsi] = defineField("deskripsi");
+const [thumbnail] = defineField("thumbnail");
+const [video] = defineField("video");
 const loading = ref(false);
 
 const axios = useAxios();

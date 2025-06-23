@@ -59,6 +59,7 @@ const { data, pending, error } = await useMyFetch<CeritaInspiratif[]>(
   "/api/cerita-inspiratif",
   {
     lazy: true,
+    server: false,
   }
 );
 </script>
