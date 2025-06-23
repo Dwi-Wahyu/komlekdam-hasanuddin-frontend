@@ -325,7 +325,7 @@ function handleChangeJenis(jenis: string) {
 
         <template v-if="data?.allBerita?.length">
           <div
-            v-for="(item, index) in data.allBerita.slice(0, 5)"
+            v-for="(item, index) in data.allBerita.slice(0, 8)"
             :key="item.id"
             class="relative mb-4 cursor-pointer"
             @click="navigateTo(`/berita/${item.id}`)"
