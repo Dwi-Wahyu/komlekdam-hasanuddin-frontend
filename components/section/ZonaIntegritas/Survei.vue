@@ -15,9 +15,12 @@
           class="mt-3 border-yellow text-yellow"
           variant="outline"
           @click="
-            navigateTo('https://forms.gle/NNcqNrtK414M5pKb6', {
-              external: true,
-            })
+            navigateTo(
+              'https://docs.google.com/forms/d/e/1FAIpQLSfpeUqp4VG7FAe3aBFJgLzhIU25AXmZx2G6UfO4qKmAPQKHag/viewform?usp=dialog',
+              {
+                external: true,
+              }
+            )
           "
         >
           Isi Survei SPKP
@@ -36,9 +39,12 @@
           class="mt-3 border-yellow text-yellow"
           variant="outline"
           @click="
-            navigateTo('https://forms.gle/YLYa8skSbjt2b1e9A', {
-              external: true,
-            })
+            navigateTo(
+              'https://docs.google.com/forms/d/e/1FAIpQLSfOjK5WW53vuVJsdkAvZUL4LunitwV6p2oQDNYncbYMWC-JKA/viewform?usp=dialog',
+              {
+                external: true,
+              }
+            )
           "
           >Isi Survei SPAK
         </WidgetsButtonBaseButton>
