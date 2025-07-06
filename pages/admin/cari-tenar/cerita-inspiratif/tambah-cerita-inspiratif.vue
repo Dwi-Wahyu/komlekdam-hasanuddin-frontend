@@ -32,8 +32,8 @@
       <div class="flex flex-col gap-5">
         <div>
           <WidgetsDataInputBaseInput
-            label="Judul Lagu"
-            placeholder="Masukkan Judul Lagu Cerita Inspiratif"
+            label="Judul"
+            placeholder="Masukkan Judul Cerita Inspiratif"
             v-model="judul"
             variant="outline"
           />

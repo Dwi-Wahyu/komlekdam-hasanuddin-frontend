@@ -30,7 +30,7 @@
             class="absolute bottom-0 bg-gradient-to-t from-black via-black flex justify-end flex-col px-4 py-3 to-transparent w-full pt-20"
           >
             <h1 class="font-semibold">{{ program.judul }}</h1>
-            <h1>{{ truncateHtml(program.deskripsi, 20) }}</h1>
+            <h1 class="line-clamp-2 text-sm">{{ program.deskripsi }}</h1>
           </div>
         </div>
       </div>
