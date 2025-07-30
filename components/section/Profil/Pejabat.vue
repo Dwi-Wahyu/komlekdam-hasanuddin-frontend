@@ -93,5 +93,6 @@ const { baseURL } = runtimeConfig.public.axios;
 
 const { data, pending, error } = useMyFetch<TResponse>("/api/pejabat", {
   lazy: true,
+  server: false,
 });
 </script>
