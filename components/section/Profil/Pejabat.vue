@@ -38,29 +38,31 @@
     </div>
   </div>
 
-  <div class="p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+  <div class="p-10 flex flex-wrap justify-center gap-8">
     <template v-if="!pending && !error">
-      <div v-for="pejabat in data?.allPejabat || []" :key="pejabat.nomor">
+      <div
+        v-for="pejabat in data?.allPejabat || []"
+        :key="pejabat.nomor"
+        class="w-[15rem] flex flex-col"
+      >
         <img
           :src="`${baseURL}/profil/pejabat/${pejabat.pasfoto}`"
           :alt="pejabat.nama"
-          class="w-full"
+          class="w-full h-auto object-cover"
         />
         <div
-          class="shadow shadow-yellow flex flex-col items-center w-full px-3"
+          class="shadow shadow-yellow flex flex-col items-center w-full px-3 py-2 flex-grow"
         >
-          <h1>{{ pejabat.nama }}</h1>
-          <h1 class="text-yellow text-sm">{{ pejabat.jabatan }}</h1>
+          <h1 class="text-center font-bold">{{ pejabat.nama }}</h1>
+          <h1 class="text-yellow text-sm text-center">{{ pejabat.jabatan }}</h1>
         </div>
       </div>
     </template>
 
-    <!-- Loading State -->
     <div v-if="pending" class="col-span-full text-center py-10">
       Memuat data pejabat...
     </div>
 
-    <!-- Error State -->
     <div v-if="error" class="col-span-full text-center py-10 text-red-500">
       Gagal memuat data pejabat
     </div>
