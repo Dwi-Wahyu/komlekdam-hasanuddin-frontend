@@ -38,7 +38,7 @@
     </div>
   </div>
 
-  <div class="py-16 flex flex-wrap justify-center gap-8">
+  <div class="py-16 px-5 flex flex-wrap justify-center gap-8">
     <template v-if="!pending && !error">
       <div
         v-for="pejabat in data?.allPejabat || []"
