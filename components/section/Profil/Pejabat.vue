@@ -38,13 +38,9 @@
     </div>
   </div>
 
-  <div class="p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+  <div class="p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
     <template v-if="!pending && !error">
-      <div
-        v-for="(pejabat, index) in data?.allPejabat || []"
-        :key="pejabat.nomor"
-        :class="{ 'md:col-start-2': index === 8 }"
-      >
+      <div v-for="pejabat in data?.allPejabat || []" :key="pejabat.nomor">
         <img
           :src="`${baseURL}/profil/pejabat/${pejabat.pasfoto}`"
           :alt="pejabat.nama"
