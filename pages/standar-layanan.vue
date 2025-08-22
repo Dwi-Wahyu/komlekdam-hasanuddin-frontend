@@ -163,8 +163,7 @@ const showQrCode = (type: string) => {
     qrModalImageUrl.value = baseURL + "/standar-layanan/" + getValue("qr-kta");
   } else if (type === "kpi") {
     qrModalTitle.value = "Scan QR Code KPI";
-    qrModalImageUrl.value =
-      baseURL + "/standar-layanan/qrcode-kpi.jpg" + getValue("qr-kpi");
+    qrModalImageUrl.value = baseURL + "/standar-layanan/" + getValue("qr-kpi");
   }
   isQrModalVisible.value = true;
 };
