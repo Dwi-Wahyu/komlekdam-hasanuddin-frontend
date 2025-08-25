@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="bg-[url('/backgrounds/zona-integritas1.png')] w-full h-screen bg-center bg-cover"
+      class="bg-[url('/backgrounds/zona-integritas1.svg')] w-full h-screen bg-center bg-cover"
     >
       <div
         class="w-full p-5 md:p-0 bg-black/50 h-full flex items-center justify-center flex-col"
