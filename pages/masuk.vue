@@ -38,6 +38,7 @@
             <WidgetsDataInputBaseInput
               variant="outline"
               label="Username"
+              id="username"
               placeholder="Masukkan Username"
               v-model="username"
               v-bind="usernameAttr"
@@ -50,6 +51,7 @@
               variant="outline"
               label="Password"
               type="password"
+              id="password"
               placeholder="Masukkan Password"
               v-model="password"
               v-bind="passwordAttr"

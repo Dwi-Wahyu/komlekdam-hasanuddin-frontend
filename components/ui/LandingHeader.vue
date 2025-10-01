@@ -3,7 +3,7 @@
     class="w-full px-5 py-6 fixed z-40 top-0 left-0 flex items-center justify-between"
   >
     <div class="flex items-center gap-2">
-      <img src="/logo/logo.png" alt="" />
+      <img src="/logo/komlekdam.svg" alt="" class="w-7 h-7" />
       <h1 class="font-bold text-lg md:text-xl">KOMLEKDAM XIV/Hasanuddin</h1>
     </div>
     <button class="md:hidden" @click="toggleIsOpen">

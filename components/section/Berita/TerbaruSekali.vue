@@ -22,9 +22,9 @@ type ResponseType = {
 const url = computed(() => `/api/berita/kategori/${jenisBerita.value}`);
 
 const page = ref(0);
-const itemsPerPage = 5; // Display 5 news articles per page
+const itemsPerPage = 5;
 const totalPages = computed(() => {
-  if (!data.value?.totalBerita) return 0; // Fixed: Removed "Ascending"
+  if (!data.value?.totalBerita) return 0;
   return Math.ceil(data.value.totalBerita / itemsPerPage);
 });
 
@@ -59,12 +59,10 @@ const visiblePages = computed(() => {
   const current = page.value;
   const total = totalPages.value;
 
-  // Always add the first page if there are multiple pages
   if (total > 1) {
     pages.add(0);
   }
 
-  // Add pages within ±2 of the current page
   for (
     let i = Math.max(0, current - 2);
     i <= Math.min(current + 2, total - 1);
@@ -73,15 +71,12 @@ const visiblePages = computed(() => {
     pages.add(i);
   }
 
-  // Always add the last page if it’s not already included and there are multiple pages
   if (total > 1 && current < total - 3) {
     pages.add(total - 1);
   }
 
-  // Convert Set to array and sort numerically
   const sortedPages = Array.from(pages).sort((a, b) => a - b);
 
-  // Limit to 5 pages, prioritizing the current page and its neighbors
   if (sortedPages.length > 5) {
     const indexOfCurrent = sortedPages.indexOf(current);
     const startIndex = Math.max(0, indexOfCurrent - 2);
@@ -154,13 +149,15 @@ function handleChangeJenis(jenis: string) {
         <div v-if="data?.allBerita?.length">
           <div
             v-for="(item, index) in data.allBerita.slice(0, 1)"
-            :key="item.id"
+            :key="index"
             @click="navigateTo(`/berita/${item.id}`)"
             class="gap-5 grid grid-cols-2 cursor-pointer"
           >
             <div>
-              <h1 class="font-semibold text-lg mb-2">{{ item.judul }}</h1>
-              <p class="font-thin">{{ item.deskripsi }}</p>
+              <h1 class="font-semibold mb-2">{{ item.judul }}</h1>
+              <p class="text-sm font-thin break-words">
+                {{ truncateHtml(item.deskripsi, 100) }}
+              </p>
             </div>
             <img
               :src="`${baseURL}/berita/thumbnail/${item.thumbnailPath}`"
@@ -204,9 +201,9 @@ function handleChangeJenis(jenis: string) {
               alt=""
             />
             <div class="flex-1 min-w-0">
-              <h1 class="mb-2 font-semibold text-lg">{{ item.judul }}</h1>
+              <h1 class="mb-2 font-semibold">{{ item.judul }}</h1>
               <p class="text-sm font-thin break-words">
-                {{ truncateHtml(item.deskripsi, 200) }}
+                {{ truncateHtml(item.deskripsi, 100) }}
               </p>
             </div>
           </div>
