@@ -17,7 +17,7 @@
               >
                 <div class="inline-flex gap-1 items-center">
                   <IconsEye />
-                  <h1>{{ data?.jumlahPengunjung }} kali diliat</h1>
+                  <h1>{{ data?.jumlahPengunjung }} kali dilihat</h1>
                 </div>
 
                 <div class="inline-flex gap-1 items-center">

@@ -103,7 +103,7 @@
   >
     <div class="flex items-center justify-between mb-8">
       <div class="flex items-center gap-2">
-        <img src="/logo/logo.png" class="w-[7vw]" alt="" />
+        <img src="/logo/komlekdam.svg" class="w-[7vw]" alt="" />
         <h1 class="font-semibold">KOMLEKDAM XIV/Hasanuddin</h1>
       </div>
       <button @click="toggleIsOpen">
