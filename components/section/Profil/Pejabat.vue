@@ -6,7 +6,7 @@
       <WidgetsJudulSection text="PEJABAT KOMLEKDAM XIV/HASANUDDIN" />
 
       <p class="text-sm mt-2 md:w-[50vw]">
-        Di bawah kepemimpinan Kakomlekdam dan Waka Komlekdam, Hubdam
+        Di bawah kepemimpinan Kakomlekdam dan Waka Komlekdam, Komlekdam
         XIV/Hasanuddin berperan dalam memastikan kelancaran komunikasi
         militer...
       </p>
@@ -30,7 +30,14 @@
           >
             <h1>{{ pimpinan.nama }}</h1>
             <div></div>
-            <h1 class="text-yellow text-sm">{{ pimpinan.jabatan }}</h1>
+
+            <h1
+              class="text-yellow text-sm"
+              v-if="pimpinan.jabatan !== 'WakaKomlekdam'"
+            >
+              {{ pimpinan.jabatan }}
+            </h1>
+            <h1 class="text-yellow text-sm" v-else>Waka Komlekdam</h1>
           </div>
         </div>
       </div>
