@@ -1,15 +1,14 @@
 <template>
-  <div
-    class="w-full h-fit md:h-screen bg-center bg-cover bg-[url('/public/backgrounds/profil-bg1.jpeg')]"
-  >
+  <div class="w-full h-fit md:h-screen">
     <div
-      class="w-full h-full bg-black/70 pt-20 p-5 flex-col text-center md:pt-10 flex items-center justify-center"
+      class="w-full h-full pt-20 p-5 flex-col text-center md:pt-10 flex items-center justify-center"
     >
       <WidgetsJudulSection text="PEJABAT KOMLEKDAM XIV/HASANUDDIN" />
 
       <p class="text-sm mt-2 md:w-[50vw]">
-        Di bawah kepemimpinan Kahubdam dan Wakahubdam, Hubdam XIV/Hasanuddin
-        berperan dalam memastikan kelancaran komunikasi militer...
+        Di bawah kepemimpinan Kakomlekdam dan Wakakomlekdam, Hubdam
+        XIV/Hasanuddin berperan dalam memastikan kelancaran komunikasi
+        militer...
       </p>
 
       <div
