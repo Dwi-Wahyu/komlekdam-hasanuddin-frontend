@@ -6,7 +6,7 @@
       <WidgetsJudulSection text="PEJABAT KOMLEKDAM XIV/HASANUDDIN" />
 
       <p class="text-sm mt-2 md:w-[50vw]">
-        Di bawah kepemimpinan Kakomlekdam dan Waka komlekdam, Hubdam
+        Di bawah kepemimpinan Kakomlekdam dan Waka Komlekdam, Hubdam
         XIV/Hasanuddin berperan dalam memastikan kelancaran komunikasi
         militer...
       </p>
