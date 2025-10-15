@@ -16,11 +16,11 @@
       <h1 class="font-semibold">Kontak dan Sosial Media Kami</h1>
       <a
         target="blank"
-        href="http://wa.me/+6282151047739"
+        href="http://wa.me/+6281997790870"
         class="flex items-center gap-1"
       >
         <IconsWhatsapp />
-        <h1 class="text-sm">+6282151047739</h1>
+        <h1 class="text-sm">+6281997790870</h1>
       </a>
       <a
         target="blank"
