@@ -27,7 +27,7 @@
           src="/public/image/Elektronika tidak memenangkan pertempuran.svg"
           alt=""
         /> -->
-        <h1 class="font-semibold">
+        <h1 class="font-semibold text-center">
           MENDOMINASI RUANG SPEKTRUM ELEKTROMAGNETIK MERUPAKAN INTI
           KEKUATAN PUSKOMLEKAD
         </h1>
