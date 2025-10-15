@@ -22,16 +22,11 @@
           Hubungi Kami
         </WidgetsButtonBaseButton>
       </div>
-      <div class="pr-9 sm:pr-10 md:pr-[14.6rem]">
-        <!-- <img
-          src="/public/image/Elektronika tidak memenangkan pertempuran.svg"
-          alt=""
-        /> -->
-        <h1 class="font-semibold text-center">
-          MENDOMINASI RUANG SPEKTRUM ELEKTROMAGNETIK MERUPAKAN INTI
-          KEKUATAN PUSKOMLEKAD
-        </h1>
-      </div>
+
+      <h1 class="font-semibold text-center">
+        MENDOMINASI RUANG SPEKTRUM ELEKTROMAGNETIK MERUPAKAN INTI
+        KEKUATAN PUSKOMLEKAD
+      </h1>
     </div>
   </div>
 </template>
