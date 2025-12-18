@@ -3,7 +3,7 @@
     <WidgetsJudulSection text="Arti Lambang Kapota Yudha" />
 
     <div class="flex flex-col sm:flex-row">
-      <img src="/public/image/profil/arti-lambang.png" />
+      <img src="/public/image/profil/arti-lambang-baru.jpeg" />
     </div>
   </div>
 </template>
