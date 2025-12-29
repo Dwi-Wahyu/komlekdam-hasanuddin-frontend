@@ -2,6 +2,12 @@
   <div
     class="overflow-x-auto bg-[#30394a] rounded-xl px-3 text-white overflow-y-visible"
   >
+    <div
+      v-if="openDropdown !== null"
+      class="fixed inset-0 z-[40] cursor-default"
+      @click="closeDropdown"
+    ></div>
+
     <table class="min-w-full text-sm overflow-hidden">
       <thead>
         <tr>
@@ -56,7 +62,7 @@
                   </div>
                 </div>
               </div>
-              <div v-if="value.includes('loop')" class="flex gap-1">
+              <div v-else-if="value.includes('loop')" class="flex gap-1">
                 <div
                   v-for="(loopItem, loopIdx) in row[value.split(':')[1]]"
                   :key="loopIdx"
@@ -83,6 +89,7 @@
               </div>
             </template>
           </td>
+
           <td
             v-if="showButtonAction"
             class="px-4 py-2 text-white rounded-r relative"
@@ -99,23 +106,30 @@
                 {{ action.label }}
               </WidgetsButtonBaseButton>
             </div>
-            <div v-else>
+
+            <div v-else class="relative inline-block">
               <button
-                @click="toggleDropdown(rowIndex)"
-                class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 border border-slate-400 flex flex-row items-center gap-2"
+                @click.stop="toggleDropdown(rowIndex)"
+                class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 border border-slate-400 flex flex-row items-center gap-2 relative z-[30]"
               >
                 Aksi
-                <IconsChevron class="-rotate-180" width="15" height="15" />
+                <IconsChevron
+                  class="transition-transform duration-200"
+                  :class="{ '-rotate-180': openDropdown !== rowIndex }"
+                  width="15"
+                  height="15"
+                />
               </button>
+
               <div
                 v-if="openDropdown === rowIndex"
-                class="fixed mt-2 w-32 -translate-x-[3.1rem] bg-[#30394a] border border-slate-200 rounded-lg shadow-lg z-40"
+                class="absolute right-0 mt-2 w-32 bg-[#30394a] border border-slate-200 rounded-lg shadow-xl z-[50]"
               >
                 <button
                   v-for="(action, actionIndex) in actions"
                   :key="actionIndex"
                   @click="handleAction(action, row)"
-                  class="w-full px-4 py-2 text-left text-white first:rounded-t-lg last:rounded-b-lg border-b last:border-b-0 hover:bg-slate-600 flex flex-row gap-2 items-center text-xs"
+                  class="w-full px-4 py-2 text-left text-white first:rounded-t-lg last:rounded-b-lg border-b border-slate-600 last:border-b-0 hover:bg-slate-600 flex flex-row gap-2 items-center text-xs"
                 >
                   <component :is="action.icon"></component>
                   {{ action.label }}
@@ -155,14 +169,22 @@ const { baseURL } = runtimeConfig.public.axios;
 
 const openDropdown = ref(null);
 
-const toggleDropdown = (index) => {
-  if (openDropdown.value == null) {
-    document.body.classList.add("no-scroll");
-  } else {
-    document.body.classList.remove("no-scroll");
-  }
+// Fungsi menutup dropdown & mengembalikan scroll
+const closeDropdown = () => {
+  openDropdown.value = null;
+  document.body.classList.remove("no-scroll");
+};
 
-  openDropdown.value = openDropdown.value === index ? null : index;
+// Fungsi toggle
+const toggleDropdown = (index) => {
+  if (openDropdown.value === index) {
+    // Jika diklik lagi pada baris yg sama -> tutup
+    closeDropdown();
+  } else {
+    // Buka dropdown baru
+    openDropdown.value = index;
+    document.body.classList.add("no-scroll");
+  }
 };
 
 const props = defineProps({
@@ -205,12 +227,18 @@ const props = defineProps({
 });
 
 const handleAction = (action, row) => {
-  document.body.classList.remove("no-scroll");
+  // Tutup dropdown dan kembalikan scroll sebelum menjalankan aksi
+  closeDropdown();
 
   if (typeof action.onClick === "function") {
     action.onClick(row);
   }
 };
+
+// Pastikan class no-scroll dihapus jika komponen di-unmount (pindah halaman)
+onUnmounted(() => {
+  document.body.classList.remove("no-scroll");
+});
 </script>
 
 <style>

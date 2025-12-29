@@ -1,7 +1,46 @@
 <template>
   <div class="w-full text-white px-5 pb-5 md:px-11 md:pb-10 pt-20">
-    <div v-if="pending">
-      <h1>Loading . . .</h1>
+    <div v-if="pending" class="animate-pulse flex flex-col gap-5">
+      <div class="grid grid-cols-3 gap-8">
+        <div class="gap-3 md:col-span-2 col-span-3 flex flex-col">
+          <div class="h-8 md:h-10 bg-gray-700 rounded w-3/4 mb-2"></div>
+
+          <div class="flex justify-between mt-2 mb-4">
+            <div class="flex items-center gap-2">
+              <div class="h-4 w-24 bg-gray-700 rounded"></div>
+              <div class="h-4 w-24 bg-gray-700 rounded"></div>
+            </div>
+            <div class="h-8 w-32 bg-gray-700 rounded-full"></div>
+          </div>
+
+          <div class="w-full aspect-video bg-gray-700 rounded-lg"></div>
+          
+          <div class="h-4 w-1/2 bg-gray-700 rounded mt-2"></div>
+
+          <div class="mt-8 space-y-3">
+            <div class="h-4 bg-gray-700 rounded w-full"></div>
+            <div class="h-4 bg-gray-700 rounded w-full"></div>
+            <div class="h-4 bg-gray-700 rounded w-11/12"></div>
+            <div class="h-4 bg-gray-700 rounded w-full"></div>
+            <div class="h-4 bg-gray-700 rounded w-4/5"></div>
+          </div>
+        </div>
+
+        <div class="hidden flex-col gap-5 md:flex">
+          <div class="flex items-center gap-4">
+            <div class="h-6 w-32 bg-gray-700 rounded"></div>
+            <div class="flex-grow border-t border-gray-700"></div>
+          </div>
+          
+          <div v-for="i in 4" :key="i" class="flex items-center bg-[#303949] rounded-l-full">
+            <div class="rounded-full w-20 h-20 bg-gray-600 shrink-0"></div>
+            <div class="p-3 w-full">
+              <div class="h-4 bg-gray-600 rounded w-full mb-2"></div>
+              <div class="h-4 bg-gray-600 rounded w-2/3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div v-else-if="error">{{ error }}</div>
     <div v-else class="flex flex-col gap-5">

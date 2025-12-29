@@ -8,8 +8,8 @@
       <h1 class="text-sm">Copyright by SkytelIndo</h1>
     </div>
 
-    <div class="flex justify-center items-center">
-      <img src="/logo/logo.png" alt="" />
+    <div class="flex justify-center items-center gap-2">
+      <img src="/logo/logo-kapota-baru.png" alt="" class="w-7 h-7" />
       <h1 class="font-semibold">KOMLEKDAM XIV/Hasanuddin</h1>
     </div>
     <div class="flex flex-col gap-2">
