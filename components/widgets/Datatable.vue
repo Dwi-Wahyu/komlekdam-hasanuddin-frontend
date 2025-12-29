@@ -1,6 +1,7 @@
 <template>
   <div
-    class="overflow-x-auto bg-[#30394a] rounded-xl px-3 text-white overflow-y-visible"
+    class="overflow-x-auto bg-[#30394a] rounded-xl px-3 text-white transition-all duration-300"
+    :class="{ 'min-h-[380px]': data.length > 0 && data.length <= 4 }"
   >
     <div
       v-if="openDropdown !== null"
@@ -8,7 +9,7 @@
       @click="closeDropdown"
     ></div>
 
-    <table class="min-w-full text-sm overflow-hidden">
+    <table class="min-w-full text-sm">
       <thead>
         <tr>
           <th
@@ -27,7 +28,7 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="relative">
         <tr
           v-for="(row, rowIndex) in data"
           :key="rowIndex"
@@ -36,6 +37,7 @@
           <td v-if="showRowNumbers" class="px-4 py-2 text-white rounded-l">
             {{ rowIndex + 1 }}
           </td>
+
           <td
             v-for="(value, colIndex) in columnsVisible"
             :key="colIndex"
@@ -123,7 +125,8 @@
 
               <div
                 v-if="openDropdown === rowIndex"
-                class="absolute right-0 mt-2 w-32 bg-[#30394a] border border-slate-200 rounded-lg shadow-xl z-[50]"
+                class="absolute right-0 w-32 bg-[#30394a] border border-slate-200 rounded-lg shadow-xl z-[50]"
+                :class="getDropdownPositionClass(rowIndex)"
               >
                 <button
                   v-for="(action, actionIndex) in actions"
@@ -169,73 +172,52 @@ const { baseURL } = runtimeConfig.public.axios;
 
 const openDropdown = ref(null);
 
-// Fungsi menutup dropdown & mengembalikan scroll
 const closeDropdown = () => {
   openDropdown.value = null;
   document.body.classList.remove("no-scroll");
 };
 
-// Fungsi toggle
 const toggleDropdown = (index) => {
   if (openDropdown.value === index) {
-    // Jika diklik lagi pada baris yg sama -> tutup
     closeDropdown();
   } else {
-    // Buka dropdown baru
     openDropdown.value = index;
     document.body.classList.add("no-scroll");
   }
 };
 
 const props = defineProps({
-  headers: {
-    type: Array,
-    required: true,
-  },
-  data: {
-    type: Array,
-    required: true,
-  },
-  actions: {
-    type: Array,
-    default: () => [],
-  },
-  loading: {
-    type: Boolean,
-    default: false,
-  },
-  showRowNumbers: {
-    type: Boolean,
-    default: false,
-  },
-  showButtonAction: {
-    type: Boolean,
-    default: false,
-  },
-  columnsVisible: {
-    type: Array,
-    default: () => [],
-  },
-  customColumns: {
-    type: Array,
-    default: () => [],
-  },
-  actionWithoutDropdown: {
-    type: Boolean,
-    default: false,
-  },
+  headers: { type: Array, required: true },
+  data: { type: Array, required: true },
+  actions: { type: Array, default: () => [] },
+  loading: { type: Boolean, default: false },
+  showRowNumbers: { type: Boolean, default: false },
+  showButtonAction: { type: Boolean, default: false },
+  columnsVisible: { type: Array, default: () => [] },
+  customColumns: { type: Array, default: () => [] },
+  actionWithoutDropdown: { type: Boolean, default: false },
 });
 
-const handleAction = (action, row) => {
-  // Tutup dropdown dan kembalikan scroll sebelum menjalankan aksi
-  closeDropdown();
+// LOGIKA POSISI DROPDOWN
+const getDropdownPositionClass = (rowIndex) => {
+  const totalRows = props.data.length;
 
+  // Jika baris adalah 2 terakhir DAN datanya banyak (>2), munculkan ke atas
+  if (totalRows > 2 && rowIndex >= totalRows - 2) {
+    return "bottom-full mb-2";
+  }
+
+  // Jika data sedikit (<=2), SELALU munculkan ke bawah (karena kita sudah kasih min-h di container)
+  return "top-full mt-2";
+};
+
+const handleAction = (action, row) => {
+  closeDropdown();
   if (typeof action.onClick === "function") {
     action.onClick(row);
   }
 };
 
-// Pastikan class no-scroll dihapus jika komponen di-unmount (pindah halaman)
 onUnmounted(() => {
   document.body.classList.remove("no-scroll");
 });

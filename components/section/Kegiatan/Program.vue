@@ -6,12 +6,29 @@
       class="bg-black/50 p-5 sm:p-20 flex pt-24 pb-10 flex-col gap-7 items-center justify-center w-full h-full"
     >
       <WidgetsJudulSection text="Kegiatan Program" :with-out-line="true" />
-      <div v-if="pending">
-        <h1>Loading . . .</h1>
+
+      <div
+        v-if="pending"
+        class="grid grid-cols-1 gap-10 md:px-64 items-center justify-center md:grid-cols-2 animate-pulse w-full"
+      >
+        <div
+          v-for="i in 2"
+          :key="i"
+          class="relative w-full sm:aspect-[359/461] border-2 border-gray-700 bg-gray-800/50"
+        >
+          <div
+            class="absolute bottom-0 w-full px-4 py-5 flex flex-col gap-2 bg-gradient-to-t from-black/80 to-transparent"
+          >
+            <div class="h-6 bg-gray-600 rounded w-3/4"></div>
+            <div class="h-4 bg-gray-600 rounded w-full"></div>
+            <div class="h-4 bg-gray-600 rounded w-1/2"></div>
+          </div>
+        </div>
       </div>
       <div v-else-if="error">
         <h1>{{ error }}</h1>
       </div>
+
       <div
         v-else-if="data?.length"
         class="grid grid-cols-1 gap-10 md:px-64 items-center justify-center md:grid-cols-2"

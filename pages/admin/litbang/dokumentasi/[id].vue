@@ -5,13 +5,26 @@
     </button>
     <WidgetsAdminPageTitle title="Dokumentasi Litbang" />
   </div>
+
   <div class="mt-5 p-5 bg-[#303949] shadow-[7px_7px_0px_0px_rgba(0,0,0,0.2)]">
-    <div v-if="pending">
-      <h1>Loading . . .</h1>
+    <div v-if="pending" class="animate-pulse flex flex-col gap-5">
+      <div class="flex gap-3 mb-3">
+        <div class="h-10 w-48 bg-gray-700 rounded-lg"></div>
+        <div class="h-10 w-40 bg-gray-700 rounded-lg"></div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-5">
+        <div
+          v-for="i in 4"
+          :key="i"
+          class="h-64 bg-gray-700 rounded-lg w-full border border-gray-600"
+        ></div>
+      </div>
     </div>
     <div v-else-if="error">
       <h1>{{ error }}</h1>
     </div>
+
     <div v-else>
       <div v-if="data?.dokumentasi.length">
         <div class="mb-3 flex items-center gap-3">
@@ -65,6 +78,7 @@
             <img
               :src="`${baseURL}/litbang/dokumentasi/${dokumentasi.path}`"
               alt=""
+              class="w-full h-auto rounded-lg"
             />
           </div>
         </div>

@@ -10,12 +10,31 @@
         />
       </div>
     </div>
-    <div v-if="pending">
-      <h1>Loading . . .</h1>
+
+    <div
+      v-if="pending"
+      class="grid grid-cols-1 gap-10 items-center justify-center md:grid-cols-2 animate-pulse"
+    >
+      <div
+        v-for="i in 4"
+        :key="i"
+        class="relative w-full sm:aspect-[359/461] border-2 border-gray-700 bg-gray-800/50"
+      >
+        <div class="absolute right-0 top-0 h-8 w-24 bg-gray-700"></div>
+
+        <div
+          class="absolute bottom-0 w-full px-4 py-5 flex flex-col gap-2 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent pt-20"
+        >
+          <div class="h-6 bg-gray-600 rounded w-3/4"></div>
+          <div class="h-4 bg-gray-600 rounded w-full"></div>
+          <div class="h-4 bg-gray-600 rounded w-1/2"></div>
+        </div>
+      </div>
     </div>
     <div v-else-if="error">
       <h1>{{ error }}</h1>
     </div>
+
     <div
       v-else-if="data"
       class="grid grid-cols-1 gap-10 items-center justify-center md:grid-cols-2"
@@ -31,7 +50,7 @@
           class="w-full h-full object-cover"
         />
         <div class="bg-yellow text-white px-2 py-1 absolute right-0 top-0">
-          <h1>{{ kegiatan.kategori }}</h1>
+          <h1 class="capitalize">{{ kegiatan.kategori.replace("-", " ") }}</h1>
         </div>
         <div
           class="absolute bottom-0 bg-gradient-to-t from-black via-black flex justify-end flex-col px-4 py-3 to-transparent w-full pt-20"

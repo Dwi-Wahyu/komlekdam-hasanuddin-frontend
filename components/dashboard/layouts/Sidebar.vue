@@ -3,19 +3,20 @@
     class="flex w-full flex-col gap-2 h-full bg-[#303949] shadow-[7px_7px_0px_0px_rgba(0,0,0,0.2)] rounded-[12px]"
     :class="store.sidebarActive ? 'p-4' : 'p-2'"
   >
-    <div class="flex flex-col items-center gap-4" v-if="!store.sidebarActive">
+    <div class="flex flex-col items-center gap-1" v-if="!store.sidebarActive">
       <div>
-        <NuxtImg src="/logo/logo.png" />
+        <NuxtImg src="/logo/logo-kapota-baru.png" width="20" height="28" />
       </div>
 
-      <div class="flex" v-for="(item, index) in store.menu">
+      <div v-for="(item, index) in store.menu">
         <img
+          :key="index"
           :src="
             store.parentActive == item.route
               ? `/icons/${item.icon}.svg`
               : `/icons/${item.icon2}.svg`
           "
-          class="w-6 cursor-pointer"
+          class="w-6 cursor-pointer mb-3"
           alt=""
           @click="store.actionSidebar"
         />
@@ -23,7 +24,7 @@
     </div>
 
     <div v-if="store.sidebarActive" class="flex gap-2">
-      <NuxtImg src="/logo/logo.png" sizes="600px" />
+      <NuxtImg src="/logo/logo-kapota-baru.png" width="40" height="48" />
       <div>
         <h1 class="font-semibold text-yellow">Admin Panel</h1>
         <h1 class="text-white text-xs">Landing Page Komlekdam XIV/Hsn</h1>

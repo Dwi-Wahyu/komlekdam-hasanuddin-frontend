@@ -1,10 +1,30 @@
 <template>
-  <div v-if="pending">
-    <h1>Loading . . .</h1>
+  <div v-if="pending" class="animate-pulse">
+    <div class="h-7 w-40 bg-gray-700 rounded mb-6"></div>
+
+    <div class="grid gap-4 grid-cols-1 md:grid-cols-2">
+      <div
+        v-for="i in 4"
+        :key="i"
+        class="bg-[#30394a] rounded-xl p-5 border border-gray-700/50"
+      >
+        <div class="flex justify-between items-start">
+          <div class="flex flex-col gap-3 w-full">
+            <div class="h-4 bg-gray-600 rounded w-1/2"></div>
+            <div class="h-8 bg-gray-600 rounded w-1/3"></div>
+          </div>
+          <div
+            class="h-12 w-12 bg-gray-600 rounded-lg shrink-0 opacity-50"
+          ></div>
+        </div>
+        <div class="mt-4 h-3 bg-gray-600 rounded w-1/4"></div>
+      </div>
+    </div>
   </div>
   <div v-else-if="error">
     {{ error }}
   </div>
+
   <div v-else-if="data" class="">
     <h1 class="text-xl mb-6 font-semibold">Dashboard</h1>
     <div class="grid gap-4 grid-cols-1 md:grid-cols-2">

@@ -8,8 +8,58 @@
   <WidgetsJudulSection text="Form Edit Penelitian" />
 
   <div class="w-full bg-[#303949] text-white">
-    <div v-if="pending">
-      <h1>Loading . . .</h1>
+    <div v-if="pending" class="p-5 animate-pulse w-full h-full">
+      <div class="flex flex-col gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <div class="h-6 w-40 bg-gray-600 rounded mb-2"></div>
+            <div
+              class="h-48 w-full bg-gray-700 rounded flex items-center justify-center"
+            >
+              <div class="h-32 w-32 bg-gray-600 rounded"></div>
+            </div>
+          </div>
+          <div>
+            <div class="h-6 w-40 bg-gray-600 rounded mb-2"></div>
+            <div
+              class="h-48 w-full bg-gray-700 rounded flex items-center justify-center"
+            >
+              <div class="h-12 w-16 bg-gray-600 rounded"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-6 mt-4">
+          <div v-for="i in 3" :key="i">
+            <div class="h-4 w-32 bg-gray-600 rounded mb-2"></div>
+            <div
+              class="h-10 w-full bg-gray-700 rounded border border-gray-600"
+            ></div>
+          </div>
+
+          <div>
+            <div class="h-4 w-40 bg-gray-600 rounded mb-2"></div>
+            <div
+              class="h-28 w-full bg-gray-700 rounded border border-gray-600"
+            ></div>
+          </div>
+        </div>
+
+        <div class="mt-5">
+          <div class="h-6 w-24 bg-gray-600 rounded mb-2"></div>
+          <div
+            class="h-64 w-full bg-gray-700 rounded border border-gray-600"
+          ></div>
+        </div>
+
+        <div class="mt-5 flex justify-center gap-5">
+          <div class="h-10 w-36 bg-gray-600 rounded"></div>
+          <div class="h-10 w-36 bg-gray-600 rounded"></div>
+          <div
+            class="h-10 w-40 bg-gray-600 rounded border border-gray-500"
+          ></div>
+        </div>
+      </div>
     </div>
     <div v-else-if="error">
       {{ error }}
@@ -138,12 +188,6 @@
       </div>
     </form>
   </div>
-
-  <WidgetsPopupToast
-    v-if="showToast"
-    :label="toastLabel"
-    @close="toggleToast"
-  />
 
   <WidgetsPopupToast
     v-if="showToast"

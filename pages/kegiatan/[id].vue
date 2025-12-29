@@ -1,8 +1,47 @@
 <template>
-  <div v-if="pending">Loading . . .</div>
+  <div v-if="pending" class="animate-pulse w-full min-h-screen">
+    <div
+      class="h-screen w-full bg-gray-900 flex flex-col items-center justify-center gap-7 p-20"
+    >
+      <div class="h-10 w-3/4 md:w-1/2 bg-gray-700 rounded"></div>
+
+      <div
+        class="w-full sm:w-[30vw] aspect-video bg-gray-800 rounded-lg border border-gray-700"
+      >
+        <div class="w-full h-full flex items-center justify-center">
+          <div class="h-12 w-16 bg-gray-700 rounded"></div>
+        </div>
+      </div>
+
+      <div class="h-10 w-40 bg-gray-700 rounded"></div>
+    </div>
+
+    <div class="p-5 sm:p-10 pb-16 bg-[#1a202c]">
+      <div class="space-y-4 max-w-4xl mx-auto">
+        <div class="h-4 bg-gray-700 rounded w-full"></div>
+        <div class="h-4 bg-gray-700 rounded w-11/12"></div>
+        <div class="h-4 bg-gray-700 rounded w-full"></div>
+        <div class="h-4 bg-gray-700 rounded w-4/5"></div>
+        <div class="h-4 bg-gray-700 rounded w-full"></div>
+      </div>
+
+      <div class="mt-16 flex flex-col items-center gap-6">
+        <div class="h-8 w-48 bg-gray-700 rounded"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-5 w-full">
+          <div
+            v-for="i in 3"
+            :key="i"
+            class="aspect-[4/3] bg-gray-700 rounded-lg w-full"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div v-else-if="error">
     {{ error }}
   </div>
+
   <div v-else-if="data">
     <div
       class="w-full h-screen min-h-screen bg-center bg-cover bg-[url('/backgrounds/berita-bg1.jpeg')]"
@@ -51,7 +90,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue"; // Pastikan ref di-import
+import { ref } from "vue";
 
 definePageMeta({
   layout: "landing",
@@ -87,33 +126,22 @@ const { data, pending, error } = await useMyFetch<TEachKegiatanType>(
   }
 );
 
-// --- PENAMBAHAN FUNGSI BARU DI SINI ---
-
-// 1. Buat state untuk teks tombol agar bisa dinamis
+// --- State & Fungsi Copy Link ---
 const buttonText = ref("Salin Link Video");
 
-// 2. Buat fungsi untuk menyalin link
 const copyVideoLink = async () => {
-  // Pastikan 'data' tidak null sebelum melanjutkan
   if (!data.value) return;
 
-  // Bentuk URL video lengkap sesuai struktur halaman ini
   const videoUrl = `${baseURL}/kegiatan/${data.value.kategori}/video/${data.value.videoPath}`;
 
   try {
-    // Gunakan Clipboard API untuk menyalin teks
     await navigator.clipboard.writeText(videoUrl);
-
-    // Berikan feedback ke pengguna
     buttonText.value = "Link Tersalin!";
-
-    // Kembalikan teks tombol ke semula setelah 2 detik
     setTimeout(() => {
       buttonText.value = "Salin Link Video";
     }, 2000);
   } catch (err) {
     console.error("Gagal menyalin link: ", err);
-    // Beri tahu pengguna jika terjadi kesalahan
     buttonText.value = "Gagal Menyalin";
     setTimeout(() => {
       buttonText.value = "Salin Link Video";

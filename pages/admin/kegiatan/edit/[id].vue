@@ -8,12 +8,68 @@
   <WidgetsJudulSection text="Form Edit Kegiatan" />
 
   <div class="w-full bg-[#303949] text-white">
-    <div v-if="loading">
-      <h1>Loading ...</h1>
+    <div v-if="loading" class="p-5 animate-pulse w-full h-full">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="flex flex-col gap-5">
+          <div>
+            <div class="h-5 w-40 bg-gray-600 rounded mb-2"></div>
+            <div
+              class="h-56 w-full bg-gray-700 rounded flex items-center justify-center border border-gray-600"
+            >
+              <div class="h-20 w-20 bg-gray-600 rounded"></div>
+            </div>
+          </div>
+          <div>
+            <div class="h-5 w-40 bg-gray-600 rounded mb-2"></div>
+            <div
+              class="h-56 w-full bg-gray-700 rounded flex items-center justify-center border border-gray-600"
+            >
+              <div class="h-12 w-16 bg-gray-600 rounded"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <div>
+            <div class="h-4 w-32 bg-gray-600 rounded mb-2"></div>
+            <div
+              class="h-10 w-full bg-gray-700 rounded border border-gray-600"
+            ></div>
+          </div>
+
+          <div>
+            <div class="h-4 w-40 bg-gray-600 rounded mb-2"></div>
+            <div
+              class="h-28 w-full bg-gray-700 rounded border border-gray-600"
+            ></div>
+          </div>
+
+          <div>
+            <div class="h-4 w-36 bg-gray-600 rounded mb-2"></div>
+            <div
+              class="h-10 w-full bg-gray-700 rounded border border-gray-600"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <div class="h-5 w-24 bg-gray-600 rounded mb-2"></div>
+        <div
+          class="h-64 w-full bg-gray-700 rounded border border-gray-600"
+        ></div>
+      </div>
+
+      <div class="mt-5 flex justify-center gap-5">
+        <div class="h-10 w-36 bg-gray-600 rounded"></div>
+        <div class="h-10 w-36 bg-gray-600 rounded"></div>
+        <div class="h-10 w-36 bg-gray-600 rounded border border-gray-500"></div>
+      </div>
     </div>
     <div v-else-if="error">
       {{ error }}
     </div>
+
     <form
       v-else-if="data"
       @submit="onSubmit"
@@ -77,7 +133,7 @@
             <WidgetsErrorInput :error="errors.tanggal" />
           </div>
         </div>
-        <div>
+        <div class="md:col-span-2">
           <h1 class="text-yellow font-semibold mb-2">Detail</h1>
           <WidgetsEditorQuill
             @editor-content="onChangeEditor"
