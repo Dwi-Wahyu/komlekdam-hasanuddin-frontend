@@ -10,7 +10,6 @@
 
 <script lang="ts" setup>
 const axios = useAxios();
-const timer = ref<NodeJS.Timeout>();
 
 const catatPengunjung = async () => {
   try {
@@ -21,14 +20,13 @@ const catatPengunjung = async () => {
 };
 
 onMounted(() => {
+  const today = new Date().toISOString().slice(0, 10);
+  const key = `visitor-${today}`;
+
+  if (localStorage.getItem(key)) return;
+
   catatPengunjung();
 
-  timer.value = setInterval(catatPengunjung, 600000);
-});
-
-onBeforeUnmount(() => {
-  if (timer.value) {
-    clearInterval(timer.value);
-  }
+  localStorage.setItem(key, "1");
 });
 </script>
